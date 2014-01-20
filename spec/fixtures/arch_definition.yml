@@ -1,0 +1,30 @@
+modules:
+  controller:
+    gems: 'twitter'
+    files: 'file1.rb, file2.rb'
+    
+  view:
+    gems: 'presenter'
+    files: 'view_file.rb, view2_file.rb, view3_file.rb'
+    
+  model:
+    gems: 'activerecord'
+    files: 'model_file.rb, model2_file.rb, model3_file.rb'
+    
+  integracao_twitter:
+    files: 'lib/integracao_twitter.rb'
+    
+definitions:
+  only:
+    view:
+      can_depend: 'twitter'
+      
+    controller:
+      can_depend: 'twitter'
+      
+    model:
+      can_depend: 'activerecord'
+      
+  view:
+    cannot_depend: 'model'
+  
