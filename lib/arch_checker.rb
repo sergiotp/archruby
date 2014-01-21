@@ -23,7 +23,10 @@ module ArchChecker
         module_dependencies = {} 
         module_files.first[1].each do |file, content|
           module_dependencies[module_files.first[0]] = {}
-          module_dependencies[module_files.first[0]][file] = ArchChecker::Ruby::Parser.new(content).dependencies
+          module_dependencies[module_files.first[0]][:classes] = []
+          ruby_parser = ArchChecker::Ruby::Parser.new(content)
+          module_dependencies[module_files.first[0]][file] = ruby_parser.dependencies
+          module_dependencies[module_files.first[0]][:classes] = ruby_parser.classes
         end
         dependencies << module_dependencies
       end

@@ -17,6 +17,5 @@ describe ArchChecker::Architecture::Parser do
     
     parser.dependencies.keys.should include(:only)
     parser.dependencies.keys.should include(:view)
-  end
-  
+  end  
 end

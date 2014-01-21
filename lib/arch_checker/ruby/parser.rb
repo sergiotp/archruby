@@ -6,11 +6,13 @@ module ArchChecker
     
     class Parser < SexpInterpreter
       attr_reader :dependencies
+      attr_reader :classes
       
       def initialize content
         super()
         @content = content
         @dependencies = []
+        @classes = []
         parse
       end
       
@@ -25,6 +27,7 @@ module ArchChecker
       
       def process_class exp
         _, class_name, *args = exp
+        @classes << class_name.to_s
         args.map! {|sub_tree| process sub_tree}
       end
       
