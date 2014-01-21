@@ -12,7 +12,7 @@ describe ArchChecker::ExtractArchitecture do
   end
   
   it 'extract file dependencies correctly' do
-    dependencies = arch_extractor.extract_dependencies
+    dependencies = arch_extractor.extract_classes_and_dependencies
     puts dependencies.inspect
   end
   

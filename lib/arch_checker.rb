@@ -16,7 +16,7 @@ module ArchChecker
       @architecture_definition.parse
     end
     
-    def extract_dependencies
+    def extract_classes_and_dependencies
       content_of_files = extract_content_files
       dependencies = []
       content_of_files.each do |module_files|
