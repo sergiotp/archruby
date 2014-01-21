@@ -18,7 +18,7 @@ module ArchChecker
         parse_modules parsed_yaml['modules']
         parse_dependencies parsed_yaml['definitions']
       end
-
+      
       private
     
       def parse_modules modules_definition

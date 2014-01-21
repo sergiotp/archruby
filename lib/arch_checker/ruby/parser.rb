@@ -11,6 +11,7 @@ module ArchChecker
         super()
         @content = content
         @dependencies = []
+        parse
       end
       
       def parse

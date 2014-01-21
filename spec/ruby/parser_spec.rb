@@ -5,7 +5,6 @@ describe ArchChecker::Ruby::Parser do
     ruby_file_content = File.open(File.expand_path('../../fixtures/ruby_example.rb', __FILE__), 'r').read
     
     ruby_parser = ArchChecker::Ruby::Parser.new(ruby_file_content)
-    ruby_parser.parse
     
     ruby_parser.dependencies.should include("BostadeTeste")
     ruby_parser.dependencies.should include("BostaRala")

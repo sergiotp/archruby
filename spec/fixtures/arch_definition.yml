@@ -1,15 +1,15 @@
 modules:
   controller:
     gems: 'twitter'
-    files: 'file1.rb, file2.rb'
+    files: 'app/controllers/**/*.rb'
     
   view:
     gems: 'presenter'
-    files: 'view_file.rb, view2_file.rb, view3_file.rb'
+    files: 'app/views/**/*.rb'
     
   model:
     gems: 'activerecord'
-    files: 'model_file.rb, model2_file.rb, model3_file.rb'
+    files: 'app/models/**/*.rb'
     
   integracao_twitter:
     files: 'lib/integracao_twitter.rb'
