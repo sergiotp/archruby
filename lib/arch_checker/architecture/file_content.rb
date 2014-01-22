@@ -8,6 +8,7 @@ module ArchChecker
       end
       
       def all_content_from_directory directory
+        return if directory.nil? || directory.eql?("")
         content = {}
         file_paths = Dir.glob("#{@base_directory}#{directory}")
         file_paths.each do | file_path |

@@ -9,8 +9,7 @@ describe ArchChecker::Ruby::Parser do
     ruby_parser.dependencies.should include("BostadeTeste")
     ruby_parser.dependencies.should include("BostaRala")
     ruby_parser.dependencies.should include("TesteClasse")
-    ruby_parser.dependencies.should include("BostaQualquer")
-    
+    ruby_parser.dependencies.should include("BostaQualquer")    
   end
   
   it 'extract correct class from file' do

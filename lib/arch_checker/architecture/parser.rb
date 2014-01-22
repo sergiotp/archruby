@@ -5,18 +5,19 @@ module ArchChecker
     
     class Parser
       attr_reader :modules
-      attr_reader :dependencies
+      attr_reader :constraints
     
       def initialize config_file_path
         @config_file = config_file_path
         @modules = {}
-        @dependencies = {}
+        @constraints = {}
+        parse
       end
       
       def parse
         parsed_yaml = yaml_parser.load_file @config_file 
         parse_modules parsed_yaml['modules']
-        parse_dependencies parsed_yaml['definitions']
+        parse_constraints parsed_yaml['constraints']
       end
       
       private
@@ -30,10 +31,10 @@ module ArchChecker
         end
       end
     
-      def parse_dependencies dependencies_definitions
-        dependencies_definitions.each do |key, value| 
+      def parse_constraints constraints_definitions
+        constraints_definitions.each do |key, value| 
           key = key.to_sym
-          @dependencies[key] = value
+          @constraints[key] = value
         end
       end
     
