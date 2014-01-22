@@ -8,8 +8,8 @@ require 'arch_checker/architecture/file_dependencies'
 module ArchChecker
   class ExtractArchitecture
     def initialize config_file_path = "", base_directory = ""
-      @config_file_path = "../../spec/fixtures/arch_definition.yml"
-      @base_directory = "/Users/sergiomiranda/Labs/ruby_arch_checker/arch_checker/spec/dummy_app/"
+      @config_file_path = config_file_path
+      @base_directory = base_directory
       @architecture_definition = ArchChecker::Architecture::Parser.new(File.expand_path(@config_file_path, __FILE__))
     end
     
@@ -62,6 +62,8 @@ module ArchChecker
         constraint_breaks << check_module_constraint(architecture_contraint, dependencies)
       end
       puts constraint_breaks.inspect
+      generate_txt constraint_breaks
+      
     end
     
     def check_only_constraint only_constraint, dependencies
@@ -103,6 +105,16 @@ module ArchChecker
       puts canot_depend_module_definitions.inspect
       puts module_architecture_constraint.inspect
       constraints_breaks
+    end
+    
+    def generate_txt constraint_breaks
+      file = File.new('violations.txt', 'w')
+      constraint_breaks.each do |constraint_break|
+        constraint_break.each do |violations|
+          file.puts "#{violations.keys.first} #{violations[violations.keys.first]}"
+        end
+      end
+      
     end
     
     def extract_module_definitions module_name, dependencies

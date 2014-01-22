@@ -96,6 +96,28 @@ module ArchChecker
         _, *args = exp
         args.map! {|sub_tree| process sub_tree}
       end
+      
+      def process_iasgn exp
+        _, variable_name, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_defs exp
+        _, receiver, method_name, arguments, *args = exp
+        process arguments
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_attrasgn exp
+        _, object, method_call, *args = exp
+        process object
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_self exp
+        _ = exp
+        
+      end
             
       def ruby_parser
         RubyParser.new

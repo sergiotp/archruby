@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'arch_checker'
+
+config_path = nil
+app_root_path = nil 
+ARGV.each do |arg|
+  option, value = arg.split('=')
+  config_path = value if option.eql?('--config-file')
+  app_root_path = value if option.eql?('--app_root_path')
+end
+
+arch_checker = ArchChecker::ExtractArchitecture.new(config_path, app_root_path)
+dependencies = arch_checker.extract_classes_and_dependencies
+puts dependencies.inspect
