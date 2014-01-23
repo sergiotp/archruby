@@ -4,6 +4,8 @@ require 'arch_checker/architecture/parser'
 require 'arch_checker/ruby/parser'
 require 'arch_checker/architecture/file_content'
 require 'arch_checker/architecture/file_dependencies'
+require 'arch_checker/presenters/text'
+require 'arch_checker/presenters/graph'
 
 module ArchChecker
   class ExtractArchitecture
@@ -61,9 +63,7 @@ module ArchChecker
         next if architecture_contraint[0] == :only
         constraint_breaks << check_module_constraint(architecture_contraint, dependencies)
       end
-      puts constraint_breaks.inspect
-      generate_txt constraint_breaks
-      
+      constraint_breaks      
     end
     
     def check_only_constraint only_constraint, dependencies
@@ -102,19 +102,7 @@ module ArchChecker
           constraints_breaks << {module_name => "depend #{canot_depend_module}"}
         end
       end
-      puts canot_depend_module_definitions.inspect
-      puts module_architecture_constraint.inspect
       constraints_breaks
-    end
-    
-    def generate_txt constraint_breaks
-      file = File.new('violations.txt', 'w')
-      constraint_breaks.each do |constraint_break|
-        constraint_break.each do |violations|
-          file.puts "#{violations.keys.first} #{violations[violations.keys.first]}"
-        end
-      end
-      
     end
     
     def extract_module_definitions module_name, dependencies

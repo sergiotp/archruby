@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "ruby_parser"
   spec.add_development_dependency "sexp_processor"
+  spec.add_development_dependency "ruby-graphviz"
 end
