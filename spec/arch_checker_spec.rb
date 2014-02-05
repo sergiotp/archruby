@@ -17,8 +17,10 @@ describe ArchChecker::ExtractArchitecture do
   end
   
   it 'verify architecture constraints correctly' do
-
-    arch_extractor.check_constraints dependencies
+    constraints_breaks = arch_extractor.check_constraints dependencies
+    puts constraints_breaks.inspect
+    constraints_breaks.should include([{:model=>"depend integracao_twitter"}])
+    constraints_breaks.should include([{:view=>"depend model"}])
   end
   
 end
