@@ -1,6 +1,5 @@
 modules:
   controller:
-    gems: 'twitter'
     files: 'app/controllers/**/*.rb'
     
   view:
@@ -8,7 +7,6 @@ modules:
     files: 'app/views/**/*.rb'
     
   model:
-    gems: 'activerecord'
     files: 'app/models/**/*.rb'
     
   integracao_twitter:

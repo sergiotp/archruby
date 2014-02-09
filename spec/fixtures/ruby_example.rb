@@ -1,4 +1,4 @@
-class Teste < BostadeTeste
+class Teste < BostadeTeste::Testado
   include BostaRala
   
   def metodo(arg1=TesteClasse, arg2)
@@ -8,7 +8,7 @@ class Teste < BostadeTeste
   end
   
   def falaAlgo
-    b = ClasseDeTeste::Em::OutroModulo.new('a')
+    b = ClasseDeTeste::Em::OutroModulo::NaPQP.new('a')
     return b
   end
   

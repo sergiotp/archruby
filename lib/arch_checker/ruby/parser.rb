@@ -5,14 +5,15 @@ module ArchChecker
   module Ruby
     
     class Parser < SexpInterpreter
-      attr_reader :dependencies
-      attr_reader :classes
+      attr_reader :dependencies, :classes, :classes_and_dependencies
       
       def initialize content
         super()
         @content = content
         @dependencies = []
         @classes = []
+        @full_class_path = []
+        @classes_and_dependencies = {}
         parse
       end
       
@@ -33,7 +34,25 @@ module ArchChecker
       
       def process_const exp
         _, const_name = exp
+        if !@full_class_path.empty?
+          const_name = build_full_name(const_name)
+        end
         @dependencies << const_name.to_s
+        build_class_dependency const_name, exp.line
+      end
+      
+      def build_full_name const_name
+        @full_class_path.unshift const_name
+        full_class_path = @full_class_path.join('::')
+        @full_class_path = []
+        full_class_path
+      end
+      
+      def build_class_dependency const_name, line_number
+        return if @classes.empty?
+        class_name = @classes.last
+        @classes_and_dependencies[class_name] = [] if @classes_and_dependencies[class_name].nil?
+        @classes_and_dependencies[class_name] << ArchChecker::Architecture::Dependency.new(const_name, line_number)
       end
       
       def process_call exp
@@ -88,6 +107,7 @@ module ArchChecker
       
       def process_colon2 exp
         _, first_part, last_part = exp
+        @full_class_path.unshift(last_part)
         # falta pegar o full name da classe que tem dependencia
         process first_part
       end

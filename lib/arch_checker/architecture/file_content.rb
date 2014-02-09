@@ -10,7 +10,7 @@ module ArchChecker
       def all_content_from_directory directory
         return if directory.nil? || directory.eql?("")
         content = {}
-        file_paths = Dir.glob("#{@base_directory}#{directory}")
+        file_paths = Dir.glob("#{@base_directory}/#{directory}")
         file_paths.each do | file_path |
           file = File.open(file_path, 'r')
           file_name = File.basename(file_path, '.rb')

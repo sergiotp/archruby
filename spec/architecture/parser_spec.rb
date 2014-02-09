@@ -1,17 +1,11 @@
 require 'spec_helper'
 
 describe ArchChecker::Architecture::Parser do
-  let(:parser) {ArchChecker::Architecture::Parser.new(File.expand_path('../../fixtures/arch_definition.yml', __FILE__)) }
+  let(:parser) {ArchChecker::Architecture::Parser.new(File.expand_path('../../fixtures/new_arch_definition.yml', __FILE__), File.expand_path('../../dummy_app/', __FILE__)) }
 
   it 'extract correct modules from architecture definition file' do 
-    parser.modules.keys.should include(:controller)
-    parser.modules.keys.should include(:model)
-    parser.modules.keys.should include(:view)
-    parser.modules.keys.should include(:integracao_twitter)
+    parser.modules.should_not be_empty
+    parser.modules.count.should be_eql(6)
   end
-  
-  it 'extract correct dependencies from architecture definition file' do
-    parser.constraints.keys.should include(:only)
-    parser.constraints.keys.should include(:view)
-  end  
+
 end

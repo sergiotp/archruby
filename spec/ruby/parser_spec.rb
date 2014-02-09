@@ -5,17 +5,21 @@ describe ArchChecker::Ruby::Parser do
   let(:ruby_parser) { ArchChecker::Ruby::Parser.new(ruby_content_file) }
   
   it 'should parse ruby files correctly and return the dependencies' do
-
-    ruby_parser.dependencies.should include("BostadeTeste")
+    ruby_parser.dependencies.should include("BostadeTeste::Testado")
     ruby_parser.dependencies.should include("BostaRala")
     ruby_parser.dependencies.should include("TesteClasse")
-    ruby_parser.dependencies.should include("BostaQualquer")    
+    ruby_parser.dependencies.should include("BostaQualquer")
+    ruby_parser.dependencies.should include("ClasseDeTeste::Em::OutroModulo::NaPQP")
+    puts ruby_parser.classes_and_dependencies.inspect
   end
   
   it 'extract correct class from file' do
     
     ruby_parser.classes.should include("Teste")
     ruby_parser.classes.should include("BostaOutra")
+  end
+  
+  it 'extract correct classes and depencies' do
   end
   
 end

@@ -8,7 +8,7 @@ describe ArchChecker::Architecture::FileDependencies do
     }
     file_dependencies = ArchChecker::Architecture::FileDependencies.new(example_file['application_controller'])
     dependencies = file_dependencies.dependencies
-    dependencies.should include("ActionController")
+    dependencies.should include("ActionController::Base")
   end
 
 end

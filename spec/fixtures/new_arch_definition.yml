@@ -1,0 +1,21 @@
+controller:
+  files: 'app/controllers/**/*.rb'
+  allowed: 'model, integracao_twitter'
+  
+view:
+  files: 'app/views/**/*.rb'
+  forbidden: 'model'
+  
+model:
+  files: 'app/models/**/*.rb'
+  required: 'activerecord'
+  
+integracao_twitter:
+  files: 'lib/integracao_twitter.rb'
+  allowed: 'twitter'
+  
+twitter:
+  gems: 'Twitter'
+  
+activerecord:
+  gems: 'ActiveRecord'

@@ -14,11 +14,7 @@ ARGV.each do |arg|
 end
 
 arch_checker = ArchChecker::ExtractArchitecture.new(config_path, app_root_path)
-dependencies = arch_checker.extract_classes_and_dependencies
-puts dependencies.inspect
+constraints_breaks = arch_checker.verify
+puts constraints_breaks.inspect
 
-constraints_break = arch_checker.check_constraints dependencies
-puts constraints_break.inspect
-
-ArchChecker::Presenters::Text.new.render(constraints_break)
-ArchChecker::Presenters::Graph.new.render(constraints_break)
+#ArchChecker::Presenters::Yaml.new.render(constraints_break)
