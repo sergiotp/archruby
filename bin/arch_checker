@@ -15,6 +15,5 @@ end
 
 arch_checker = ArchChecker::ExtractArchitecture.new(config_path, app_root_path)
 constraints_breaks = arch_checker.verify
-puts constraints_breaks.inspect
 
-#ArchChecker::Presenters::Yaml.new.render(constraints_break)
+ArchChecker::Presenters::Yaml.new.render(constraints_breaks)

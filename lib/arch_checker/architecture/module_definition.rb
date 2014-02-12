@@ -73,7 +73,8 @@ module ArchChecker
       def is_mine? class_name
         class_name = class_name.split('::').first
         @classes.each do |klass|
-          if klass.include? class_name
+          #TODO Arrumar isso com uma expressao regular
+          if klass.include?(class_name) && klass.size == class_name.size
             return true
           end
         end
@@ -106,7 +107,11 @@ module ArchChecker
       def verify_required architecture
         return if @required_modules.empty?
         breaks = []
-        @classes_and_dependencies.each do |class_and_depencies|
+        @classes_and_dependencies.each_with_index do |class_and_depencies, index|
+          if class_and_depencies.empty?
+            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @required_modules.first, :class_origin => @classes[index])  
+            next
+          end
           class_and_depencies.each do |class_name, dependencies|
             dependency_module_names = []
             dependencies.each do |dependency|
@@ -141,7 +146,18 @@ module ArchChecker
       
       def verify_allowed architecture
         return if @allowed_modules.empty?
-        verify_forbidden architecture
+        breaks = []
+        @classes_and_dependencies.each do |class_and_depencies|
+          class_and_depencies.each do |class_name, dependencies|
+            dependencies.each do |dependency|
+              module_name = architecture.module_name(dependency.class_name)
+              if module_name != self.name && !@allowed_modules.include?(module_name)
+                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name)
+              end
+            end
+          end
+        end
+        breaks
       end
 
 private

@@ -5,6 +5,7 @@ module ArchChecker
    
     class Yaml
       def render constraint_breaks
+        file = File.new('constraints_breaks.yml', 'w')
         contraints = []
         constraint_breaks.each do |constraint_break|
           constraint = {}
@@ -16,7 +17,8 @@ module ArchChecker
           constraint[constraint_break.type]['module_target'] = constraint_break.module_target
           contraints << constraint
         end
-        contraints.to_yaml
+        file.write contraints.to_yaml
+        file.close
       end
     end
 

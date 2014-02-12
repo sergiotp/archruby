@@ -108,7 +108,6 @@ module ArchChecker
       def process_colon2 exp
         _, first_part, last_part = exp
         @full_class_path.unshift(last_part)
-        # falta pegar o full name da classe que tem dependencia
         process first_part
       end
       
@@ -131,6 +130,20 @@ module ArchChecker
       def process_attrasgn exp
         _, object, method_call, *args = exp
         process object
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_ivar exp
+        _, instance_variable_name = exp
+      end
+            
+      def process_dstr exp
+        _, string, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_evstr exp
+        _, *args = exp
         args.map! {|sub_tree| process sub_tree}
       end
       
