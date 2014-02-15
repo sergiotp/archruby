@@ -14,6 +14,8 @@ require 'arch_checker/presenters/yaml'
 
 module ArchChecker
   class ExtractArchitecture
+    attr_reader :architecture
+    
     def initialize config_file_path = "", base_directory = ""
       @config_file_path = config_file_path
       @base_directory = base_directory

@@ -3,6 +3,9 @@ module ArchChecker
     class ConstraintBreak
       attr_reader :type, :class_origin, :line_origin, :class_target, :module_origin, :module_target
 
+      ABSENSE = "absence"
+      DIVERGENCE = "divergence"
+
       def initialize options
         @type = options[:type]
         @class_origin = options[:class_origin]

@@ -4,10 +4,11 @@ module ArchChecker
   module Presenters
    
     class Yaml
-      def render constraint_breaks
+      def render architecture
+        constraints_breaks = architecture.constraints_breaks
         file = File.new('constraints_breaks.yml', 'w')
         contraints = []
-        constraint_breaks.each do |constraint_break|
+        constraints_breaks.each do |constraint_break|
           constraint = {}
           constraint[constraint_break.type] = {}
           constraint[constraint_break.type]['class_origin'] = constraint_break.class_origin

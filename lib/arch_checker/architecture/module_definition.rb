@@ -81,6 +81,10 @@ module ArchChecker
         return false
       end
       
+      def is_external?
+        @files.empty?
+      end
+      
       def verify_constraints architecture
         required_breaks = verify_required architecture
         forbidden_breaks = verify_forbidden architecture

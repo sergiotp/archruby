@@ -2,7 +2,7 @@ module ArchChecker
   module Architecture
     
     class Architecture
-      attr_reader :constraints_breaks
+      attr_reader :constraints_breaks, :modules
       
       def initialize modules
         @modules = modules
@@ -18,6 +18,17 @@ module ArchChecker
         end
         @constraints_breaks = @constraints_breaks.flatten
         @constraints_breaks
+      end
+      
+      def how_many_break module_name, constraint_type
+        raise "need to verify architecture first" if @constraints_breaks.empty?
+        count = 0
+        @constraints_breaks.each do |constraint_break|
+          if constraint_break.type == constraint_type && constraint_break.module_origin == module_name
+            count += 1
+          end
+        end
+        count
       end
       
       def module_name class_name
