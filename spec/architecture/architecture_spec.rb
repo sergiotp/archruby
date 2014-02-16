@@ -9,6 +9,6 @@ describe ArchChecker::Architecture::Architecture do
     puts architecture.constraints_breaks.count
     puts architecture.constraints_breaks.inspect
     puts "YAMLLLL"
-    puts ArchChecker::Presenters::Yaml.new.render(architecture.constraints_breaks)
+    puts ArchChecker::Presenters::Yaml.new.render(architecture)
   end
 end

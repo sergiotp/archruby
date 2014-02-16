@@ -16,6 +16,7 @@ module ArchChecker
           constraint[constraint_break.type]['class_target'] = constraint_break.class_target
           constraint[constraint_break.type]['module_origin'] = constraint_break.module_origin
           constraint[constraint_break.type]['module_target'] = constraint_break.module_target
+          constraint[constraint_break.type]['message'] = constraint_break.msg
           contraints << constraint
         end
         file.write contraints.to_yaml

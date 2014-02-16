@@ -5,21 +5,25 @@
     class_target: Twitter::REST::Client
     module_origin: controller
     module_target: twitter
+    message: acessing a not allowed module
 - divergence:
     class_origin: Teste
     line_origin: 3
     class_target: SearchTerm
     module_origin: view
     module_target: model
+    message: accessing a forbidden module
 - divergence:
     class_origin: Teste
     line_origin: 3
     class_target: SearchTerm
     module_origin: view
     module_target: model
+    message: acessing a not allowed module
 - absence:
     class_origin: TesteClass
     line_origin: 
     class_target: 
     module_origin: model
     module_target: activerecord
+    message: not implement a required module

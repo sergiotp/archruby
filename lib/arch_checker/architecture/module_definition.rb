@@ -113,7 +113,7 @@ module ArchChecker
         breaks = []
         @classes_and_dependencies.each_with_index do |class_and_depencies, index|
           if class_and_depencies.empty?
-            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @required_modules.first, :class_origin => @classes[index])  
+            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @required_modules.first, :class_origin => @classes[index], :msg => "not implement a required module")  
             next
           end
           class_and_depencies.each do |class_name, dependencies|
@@ -124,7 +124,7 @@ module ArchChecker
             end
             @required_modules.each do |required_module|
               if !dependency_module_names.include?(required_module)
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => required_module, :class_origin => class_name)
+                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => required_module, :class_origin => class_name, :msg => "not implement a required module")
               end
             end
           end
@@ -140,7 +140,7 @@ module ArchChecker
             dependencies.each do |dependency|
               module_name = architecture.module_name(dependency.class_name)
               if @forbidden_modules.include? module_name
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name)
+                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module which is forbidden")
               end
             end
           end
@@ -156,7 +156,7 @@ module ArchChecker
             dependencies.each do |dependency|
               module_name = architecture.module_name(dependency.class_name)
               if module_name != self.name && !@allowed_modules.include?(module_name)
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name)
+                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module not allowed")
               end
             end
           end
