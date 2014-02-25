@@ -37,6 +37,7 @@ module ArchChecker
       end
                         
       def parse_constraints definitions
+        check_constraints definitions
         ALLOWED_CONSTRAINTS.each do |constraint|
           constraint_definition = definitions[constraint]
           constraint_definition = '' if constraint_definition.nil?
@@ -82,7 +83,11 @@ module ArchChecker
       end
       
       def is_external?
-        @files.empty?
+        !@gems.empty?
+      end
+      
+      def is_empty?
+        @classes.empty?
       end
       
       def verify_constraints architecture
@@ -165,6 +170,10 @@ module ArchChecker
       end
 
 private
+  
+      def check_constraints definitions
+        raise ArchChecker::MultipleConstraints if definitions['allowed'] && !definitions['allowed'].empty? && definitions['forbidden'] && !definitions['forbidden'].empty?
+      end
 
     end
   end

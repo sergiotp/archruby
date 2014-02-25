@@ -16,7 +16,12 @@ module ArchChecker
       def parse
         parsed_yaml = yaml_parser.load_file @config_file
         parsed_yaml.each do |module_name, definitions|
-          module_definition = ArchChecker::Architecture::ModuleDefinition.new(module_name, definitions, @base_path)
+          begin
+            module_definition = ArchChecker::Architecture::ModuleDefinition.new(module_name, definitions, @base_path)
+          rescue ArchChecker::MultipleConstraints => e
+            STDOUT.puts "The config file is not right: #{e.msg} | err_code: #{e.status_code} | module_definition: #{module_name}"
+            exit(e.status_code)
+          end          
           @modules << module_definition
         end        
       end

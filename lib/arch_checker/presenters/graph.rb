@@ -7,30 +7,52 @@ module ArchChecker
       
       def render architecture
         modules = architecture.modules
+        
+        g = GraphViz.new(:G)
 
-        g = GraphViz.new( :G, :type => :digraph )
+        g.edge[:color] = "black"
+        g.edge[:weight] = "1"
+        g.edge[:style] = "filled"
+        g.edge[:label] = ""
+        
+        internal = g.subgraph("internal", "label" => "Internal", "color" => "black")
+        
+        external = g.subgraph("external", "label" => "External", "color" => "black", "rank" => "same")
+        
         nodes = {}
-        edges = []
+        
+        internal_nodes = []
+        external_nodes = []
         modules.each do |module_definiton|
           if module_definiton.is_external?
-            nodes[module_definiton.name] = g.add_nodes(module_definiton.name, :shape => "box")
+            nodes[module_definiton.name] = external.add_nodes(module_definiton.name, "shape" => "parallelogram", "color" => "gray60", "style" => "filled")
+            external_nodes << nodes[module_definiton.name]
           else
-            nodes[module_definiton.name] = g.add_nodes(module_definiton.name)
+            if module_definiton.is_empty?
+              nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "black", "style" => "dotted")
+            else
+              nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "gray92", "style" => "filled")
+            end
+            internal_nodes << nodes[module_definiton.name]
           end
         end
+        
+        edges = {}
+        edges_objs = []
         
         modules.each do |module_definiton|
           module_name = module_definiton.name
           node_origin = nodes[module_name]
-
-          module_definiton.required_modules.each do |required_module_name|
-            node_dest = nodes[required_module_name]
-            edges << g.add_edges(node_origin, node_dest)
-          end
+          edges[module_name] ||= {}
+          edges[module_name][:edges] ||= []
           
-          module_definiton.allowed_modules.each do |allowed_module_name|
-            node_dest = nodes[allowed_module_name]
-            edges << g.add_edges(node_origin, node_dest)
+          module_definiton.dependencies.each do |class_name|
+            module_dest = architecture.module_name class_name
+            if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
+              edges[module_name][:edges] << module_dest
+              node_dest = nodes[module_dest]
+              edges_objs << internal.add_edges(node_origin, node_dest)
+            end
           end
         end
         
@@ -42,20 +64,20 @@ module ArchChecker
           node_origin = nodes[module_origin]
           node_dest = nodes[module_target]
           node_found = false
-          edges.each do |edge|
+          edges_objs.each do |edge|
             if edge.node_one == module_origin && edge.node_two == module_target
               if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
                 edge.set do |e|
-                  e.label = "X [#{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)}]"
+                  e.label = "X (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)})"
                   e.color = "red"
                   e.style = "bold"
                   e.weight = 1
                 end
               else
                 edge.set do |e|
-                  e.label = "! [#{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)}]"
-                  e.color = "red"
-                  e.weight = 3
+                  e.label = "! (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)})"
+                  e.color = "#d59862"
+                  e.style = "bold"
                 end                
               end
               node_found = true
@@ -66,14 +88,34 @@ module ArchChecker
           if !node_found
             if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
               break_count = architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)
-              edges << g.add_edges(node_origin, node_dest, :color => 'red', :label => "X [#{break_count}]", 'weight' => 1, 'style' => 'bold')
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "X (##{break_count})", 'weight' => 1, 'style' => 'bold')
             else
               break_count = architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)
-              edges << g.add_edges(node_origin, node_dest, :color => 'red', :label => "! [#{break_count}]", 'weight' => 3)
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "! (##{break_count})", 'weight' => 3)
             end
           end
         end
         
+        modules.each do |module_definiton|
+          module_origin = module_definiton.name
+          node_origin = nodes[module_origin]
+          
+          module_definiton.allowed_modules.each do |allowed_module_name|
+            module_target = allowed_module_name
+            node_dest = nodes[allowed_module_name]
+            edge_found = false
+            edges_objs.each do |edge|
+              if edge.node_one == module_origin && edge.node_two == module_target
+                edge_found = true
+                break
+              end
+            end
+            if !edge_found
+              internal.add_edges(node_origin, node_dest, :style => 'dotted')
+            end
+          end
+        end
+                
         g.output( :png => "architecture.png" )
       end
       

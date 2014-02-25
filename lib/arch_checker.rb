@@ -28,5 +28,17 @@ module ArchChecker
       @constraints_breaks = @architecture.verify
     end
   end
+  
+  class Error < StandardError
+    def self.status_code(code)
+      define_method(:status_code) { code }
+    end
+    
+    def self.msg(msg)
+      define_method(:msg) { msg }
+    end
+  end
+  
+  class MultipleConstraints < ArchChecker::Error; status_code(2) ; msg("Allowed and Forbidden in same module definition") end
 end
 
