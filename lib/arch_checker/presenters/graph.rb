@@ -51,11 +51,6 @@ module ArchChecker
             if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
               edges[module_name][:edges] << module_dest
               node_dest = nodes[module_dest]
-              puts module_name
-              puts module_dest
-              how_many_access = architecture.how_many_access_to module_name, module_dest
-              puts how_many_access
-              puts
               edges_objs << internal.add_edges(node_origin, node_dest)
             end
           end
