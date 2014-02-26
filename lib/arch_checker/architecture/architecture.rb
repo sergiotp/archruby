@@ -40,8 +40,30 @@ module ArchChecker
           end
         end
         module_name_to_return
-      end      
+      end
       
+      def how_many_access_to module_origin, module_dest
+        module_origin = search_module module_origin
+        count = 0
+        module_origin.dependencies.each do |dependency_class_name|
+          dependency_module_name = module_name dependency_class_name
+          if dependency_module_name == module_dest
+            count += 1
+          end
+        end
+        count
+      end      
+    
+    private
+
+      def search_module module_name
+        @modules.each do |module_definition|
+          if module_definition.name == module_name
+            return module_definition
+          end
+        end
+      end
+    
     end
   
   end

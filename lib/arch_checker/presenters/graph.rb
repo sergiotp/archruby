@@ -11,7 +11,7 @@ module ArchChecker
         g = GraphViz.new(:G)
 
         g.edge[:color] = "black"
-        g.edge[:weight] = "1"
+        g.edge[:weight] = 1
         g.edge[:style] = "filled"
         g.edge[:label] = ""
         
@@ -29,7 +29,7 @@ module ArchChecker
             external_nodes << nodes[module_definiton.name]
           else
             if module_definiton.is_empty?
-              nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "black", "style" => "dotted")
+              nodes[module_definiton.name] = internal.add_nodes("#{module_definiton.name}\n [empty]", "color" => "gray74")
             else
               nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "gray92", "style" => "filled")
             end
@@ -51,6 +51,11 @@ module ArchChecker
             if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
               edges[module_name][:edges] << module_dest
               node_dest = nodes[module_dest]
+              puts module_name
+              puts module_dest
+              how_many_access = architecture.how_many_access_to module_name, module_dest
+              puts how_many_access
+              puts
               edges_objs << internal.add_edges(node_origin, node_dest)
             end
           end
@@ -68,14 +73,13 @@ module ArchChecker
             if edge.node_one == module_origin && edge.node_two == module_target
               if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
                 edge.set do |e|
-                  e.label = "X (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)})"
+                  e.label = "<<b> X (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)})</b>>"
                   e.color = "red"
                   e.style = "bold"
-                  e.weight = 1
                 end
               else
                 edge.set do |e|
-                  e.label = "! (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)})"
+                  e.label = "<<b> ! (##{architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)})</b>>"
                   e.color = "#d59862"
                   e.style = "bold"
                 end                
@@ -88,16 +92,16 @@ module ArchChecker
           if !node_found
             if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
               break_count = architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::ABSENSE)
-              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "X (##{break_count})", 'weight' => 1, 'style' => 'bold')
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "<<b>X (##{break_count})</b>>", 'style' => 'bold')
             else
               break_count = architecture.how_many_break(module_origin, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)
-              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "! (##{break_count})", 'weight' => 3)
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :label => "<<b>! (##{break_count})</b>>", 'style' => 'bold')
             end
           end
         end
         
         modules.each do |module_definiton|
-          module_origin = module_definiton.name
+          module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
           
           module_definiton.allowed_modules.each do |allowed_module_name|
@@ -111,7 +115,7 @@ module ArchChecker
               end
             end
             if !edge_found
-              internal.add_edges(node_origin, node_dest, :style => 'dotted')
+              internal.add_edges(node_origin, node_dest, :color => 'gray74', :label => "[none]")
             end
           end
         end
