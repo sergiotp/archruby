@@ -11,7 +11,6 @@ module ArchChecker
         g = GraphViz.new(:G)
 
         g.edge[:color] = "black"
-        g.edge[:weight] = 1
         g.edge[:style] = "filled"
         g.edge[:label] = ""
         
@@ -29,9 +28,9 @@ module ArchChecker
             external_nodes << nodes[module_definiton.name]
           else
             if module_definiton.is_empty?
-              nodes[module_definiton.name] = internal.add_nodes("#{module_definiton.name}\n [empty]", "color" => "gray74")
+              nodes[module_definiton.name] = internal.add_nodes("#{module_definiton.name}\n [empty]", "color" => "gray74", "shape" => "rectangle")
             else
-              nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "gray92", "style" => "filled")
+              nodes[module_definiton.name] = internal.add_nodes(module_definiton.name, "color" => "gray92", "style" => "filled", "shape" => "rectangle")
             end
             internal_nodes << nodes[module_definiton.name]
           end
