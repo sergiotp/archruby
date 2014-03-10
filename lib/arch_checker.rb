@@ -1,6 +1,7 @@
 require "arch_checker/version"
 
 require 'arch_checker/architecture/parser'
+require 'arch_checker/architecture/config_definition'
 require 'arch_checker/ruby/parser'
 require 'arch_checker/architecture/file_content'
 require 'arch_checker/architecture/file_dependencies'
