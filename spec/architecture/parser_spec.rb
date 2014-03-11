@@ -5,7 +5,7 @@ describe ArchChecker::Architecture::Parser do
 
   it 'extract correct modules from architecture definition file' do 
     parser.modules.should_not be_empty
-    parser.modules.count.should be_eql(6)
+    parser.modules.count.should be_eql(9)
   end
 
 end
