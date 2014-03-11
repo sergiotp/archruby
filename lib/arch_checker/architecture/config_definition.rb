@@ -56,7 +56,7 @@ module ArchChecker
     private
   
       def check_constraints definitions
-        raise ArchChecker::MultipleConstraints if definitions['allowed'] && !definitions['allowed'].empty? && definitions['forbidden'] && !definitions['forbidden'].empty?
+        raise MultipleConstraints if definitions['allowed'] && !definitions['allowed'].empty? && definitions['forbidden'] && !definitions['forbidden'].empty?
       end
       
       
