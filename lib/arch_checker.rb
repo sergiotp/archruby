@@ -40,5 +40,6 @@ module ArchChecker
   end
   
   class MultipleConstraints < ArchChecker::Error; status_code(2) ; msg("Allowed and Forbidden in same module definition") end
+  class ArchitectureNotVerified < ArchChecker::Error; status_code(3) ; msg("The architecture need to be verified first") end
 end
 

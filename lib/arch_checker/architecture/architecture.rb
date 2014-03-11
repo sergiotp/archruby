@@ -21,7 +21,7 @@ module ArchChecker
       end
       
       def how_many_break module_name, constraint_type
-        raise "need to verify architecture first" if @constraints_breaks.empty?
+        raise ArchitectureNotVerified if @constraints_breaks.empty?
         count = 0
         @constraints_breaks.each do |constraint_break|
           if constraint_break.type == constraint_type && constraint_break.module_origin == module_name

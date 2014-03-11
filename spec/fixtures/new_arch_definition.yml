@@ -1,6 +1,6 @@
 controller:
   files: 'app/controllers/**/*.rb'
-  allowed: 'model, integracao_twitter'
+  allowed: 'model, integracao_twitter, facebook_looker, actioncontroller'
   
 view:
   files: 'app/views/**/*.rb'
@@ -9,13 +9,24 @@ view:
 model:
   files: 'app/models/**/*.rb'
   required: 'activerecord'
+  forbidden: 'facebook'
   
 integracao_twitter:
   files: 'lib/integracao_twitter.rb'
   allowed: 'twitter'
   
+facebook_looker:
+  files: 'lib/fetch_facebook_info.rb'
+  allowed: 'facebook'
+  
 twitter:
   gems: 'Twitter'
+
+facebook:
+  gems: 'Koala'
   
 activerecord:
   gems: 'ActiveRecord'
+  
+actioncontroller:
+  gems: 'ActionController'
