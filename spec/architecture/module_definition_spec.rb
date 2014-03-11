@@ -44,8 +44,6 @@ describe ArchChecker::Architecture::ModuleDefinition do
     forbidden_breaks = module_definition.verify_forbidden architecture
     forbidden_breaks.count.should == 1
     forbidden_breaks.first.class_origin.should == "ViewTest"
-    breaks = architecture.constraints_breaks
-    puts breaks.inspect
   end
   
 end
