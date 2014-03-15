@@ -15,12 +15,13 @@ describe ArchChecker::Ruby::Parser do
   it 'extract correct class from file' do    
     ruby_parser.classes.should include("Teste")
     ruby_parser.classes.should include("BostaOutra")
+    ruby_parser.classes.should include("Multiple::Access::Teste")
   end
   
   it 'extract correct classes and depencies' do
     ruby_parser.classes_and_dependencies.keys.count.should be_eql(2)
     ruby_parser.classes_and_dependencies['Teste'].count.should be_eql(7)
-    ruby_parser.classes_and_dependencies['BostaOutra'].count.should be_eql(1)
+    ruby_parser.classes_and_dependencies['BostaOutra'].count.should be_eql(1)    
     
     teste_class_dependencies = ruby_parser.classes_and_dependencies['Teste'].collect { |dependency| dependency.class_name}
     bosta_outra_class_dependencies = ruby_parser.classes_and_dependencies['BostaOutra'].collect { |dependency| dependency.class_name}

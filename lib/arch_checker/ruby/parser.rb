@@ -14,6 +14,7 @@ module ArchChecker
         @classes = []
         @full_class_path = []
         @classes_and_dependencies = {}
+        @complete_class_name = []
         parse
       end
       
@@ -28,8 +29,25 @@ module ArchChecker
       
       def process_class exp
         _, class_name, *args = exp
-        @classes << class_name.to_s
+        if class_name.class == Symbol
+          @classes << class_name.to_s
+        else
+          get_complete_class_name class_name
+          @classes << @complete_class_name.join("::")
+        end
         args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def get_complete_class_name exp
+        if exp[0] == :const
+          _, const_name = exp
+          @complete_class_name.unshift const_name
+          return
+        else
+          _, first_part, last_constant_part = exp
+          @complete_class_name.unshift(last_constant_part)
+          get_complete_class_name first_part
+        end        
       end
       
       def process_const exp
@@ -148,10 +166,115 @@ module ArchChecker
       end
       
       def process_self exp
-        _ = exp
-        
+        _ = exp        
       end
-            
+      
+      def process_masgn exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_array exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_cdecl exp
+        _, constant_name = exp
+      end
+      
+      def process_and exp        
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_colon3 exp
+        _, constant_name = exp
+      end
+      
+      def process_rescue exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_resbody exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_gvar exp
+        _, ruby_global_var_name = exp
+      end
+      
+      def process_if exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_true exp
+        _ = exp
+      end
+      
+      def process_false exp
+        _ = exp
+      end
+      
+      def process_case exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_when exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_op_asgn1 exp
+        _, variabe_rec, position_to_access, operator, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_arglist exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_block_pass exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_or exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_sclass exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_next exp
+        _ = exp
+      end
+      
+      def process_module exp
+        _, module_name, *args = exp
+        @classes << module_name.to_s
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_to_ary exp
+        _, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_while exp
+        _, condition, *args = exp
+        true_clause = args.pop
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
       def ruby_parser
         RubyParser.new
       end

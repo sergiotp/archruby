@@ -25,6 +25,17 @@ class BostaOutra < BostaQualquer
   end
 end
 
+class Multiple::Access::Teste 
+end
+
 def testedemetodosozinho
   
+end
+
+module Modulo
+  class ClasseDentrodoModulo
+  end
+  
+  class ClasseDentroDoModulo2
+  end
 end
