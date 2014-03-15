@@ -34,6 +34,13 @@ end
 
 module Modulo
   class ClasseDentrodoModulo
+    def teste
+      ::Teste::De::Dependencia.new
+    end
+    
+    def outro_teste
+      ::DependenciaBuscandoDoRoot.new
+    end    
   end
   
   class ClasseDentroDoModulo2

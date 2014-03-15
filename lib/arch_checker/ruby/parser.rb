@@ -14,6 +14,7 @@ module ArchChecker
         @classes = []
         @full_class_path = []
         @classes_and_dependencies = {}
+        @module_names = []
         @complete_class_name = []
         parse
       end
@@ -30,8 +31,13 @@ module ArchChecker
       def process_class exp
         _, class_name, *args = exp
         if class_name.class == Symbol
-          @classes << class_name.to_s
+          if !@module_names.empty?
+            @classes << "#{@module_names.join("::")}::#{class_name}"
+          else
+            @classes << class_name.to_s
+          end
         else
+          # cai aqui quando a definicao é algo do tipo: class Teste::De end
           get_complete_class_name class_name
           @classes << @complete_class_name.join("::")
         end
@@ -73,6 +79,13 @@ module ArchChecker
         @classes_and_dependencies[class_name] << ArchChecker::Architecture::Dependency.new(const_name, line_number)
       end
       
+      def process_colon3 exp
+        _, constant_name = exp
+        const_name = build_full_name("::#{constant_name}")
+        @dependencies << const_name.to_s
+        build_class_dependency const_name, exp.line
+      end
+            
       def process_call exp
         _, receiver, method_name, *args = exp
         process receiver
@@ -187,11 +200,7 @@ module ArchChecker
         _, *args = exp
         args.map! {|sub_tree| process sub_tree}
       end
-      
-      def process_colon3 exp
-        _, constant_name = exp
-      end
-      
+            
       def process_rescue exp
         _, *args = exp
         args.map! {|sub_tree| process sub_tree}
@@ -260,8 +269,9 @@ module ArchChecker
       
       def process_module exp
         _, module_name, *args = exp
-        @classes << module_name.to_s
+        @module_names.push module_name.to_s
         args.map! {|sub_tree| process sub_tree}
+        @module_names.pop
       end
       
       def process_to_ary exp

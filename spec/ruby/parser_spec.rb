@@ -19,17 +19,23 @@ describe ArchChecker::Ruby::Parser do
   end
   
   it 'extract correct classes and depencies' do
-    ruby_parser.classes_and_dependencies.keys.count.should be_eql(2)
+    puts ruby_parser.classes_and_dependencies.inspect
+    ruby_parser.classes_and_dependencies.keys.count.should be_eql(3)
     ruby_parser.classes_and_dependencies['Teste'].count.should be_eql(7)
-    ruby_parser.classes_and_dependencies['BostaOutra'].count.should be_eql(1)    
+    ruby_parser.classes_and_dependencies['BostaOutra'].count.should be_eql(1)
+    ruby_parser.classes_and_dependencies['Modulo::ClasseDentrodoModulo'].count.should be_eql(2)
     
     teste_class_dependencies = ruby_parser.classes_and_dependencies['Teste'].collect { |dependency| dependency.class_name}
     bosta_outra_class_dependencies = ruby_parser.classes_and_dependencies['BostaOutra'].collect { |dependency| dependency.class_name}
+    classe_dentro_do_modulo_dependencies = ruby_parser.classes_and_dependencies['Modulo::ClasseDentrodoModulo'].collect { |dependency| dependency.class_name}
     
     teste_class_dependencies.should include("ClasseDeTeste::Em::OutroModulo::NaPQP")
-    teste_class_dependencies.should include("BostadeTeste::Testado")
+    teste_class_dependencies.should include("BostadeTeste::Testado")    
     
     bosta_outra_class_dependencies.should include("BostaQualquer")
+    
+    classe_dentro_do_modulo_dependencies.should include("::Teste::De::Dependencia")
+    classe_dentro_do_modulo_dependencies.should include("::DependenciaBuscandoDoRoot")
   end
   
 end
