@@ -23,7 +23,11 @@ describe ArchChecker::Architecture::ModuleDefinition do
     module_definition.is_mine?("Teste").should be_true
     module_definition.is_mine?("User").should be_true
     module_definition.is_mine?("ActiveRecord").should be_false
-    module_definition.is_mine?("QualquerCoisa").should be_false    
+    module_definition.is_mine?("QualquerCoisa").should be_false
+
+    config_definition = ArchChecker::Architecture::ConfigDefinition.new 'actioncontroller', parsed_yaml['actioncontroller']
+    module_definition = ArchChecker::Architecture::ModuleDefinition.new(config_definition, base_directory)
+    module_definition.is_mine?("ActionController::Base").should be_true
   end
   
   it 'verify required constraint correctly' do

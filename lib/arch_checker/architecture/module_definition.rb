@@ -46,14 +46,61 @@ module ArchChecker
       end
       
       def is_mine? class_name
-        class_name = class_name.split('::').first
-        @classes.each do |klass|
-          #TODO Arrumar isso com uma expressao regular
-          if klass.include?(class_name) && klass.size == class_name.size
-            return true
+        splited_class_name = class_name.split('::')
+        first_class_name = splited_class_name.first
+        is_mine = false
+        if first_class_name.empty?
+          #pocurando por um match exato de dependencia
+          first_name = splited_class_name[1]
+          class_name = splited_class_name.join("::")
+          @classes.each do |klass|
+            #TODO Arrumar isso com uma expressao regular
+            if klass.include?(class_name) && klass.size == class_name.size
+              is_mine = true
+              break
+            end
+          end
+          if !is_mine
+            @classes.each do |klass|
+              #TODO Arrumar isso com uma expressao regular
+              if klass.include?(first_name) && klass.size == first_name.size
+                is_mine = true
+                break
+              end
+            end
           end
         end
-        return false
+        if !is_mine
+          # procurando por acesso a classe que possa ser desse modulo
+          class_name = splited_class_name.join("::")
+          included_separator = class_name.include?("::")
+          @classes.each do |klass|
+            #TODO Arrumar isso com uma expressao regular
+            if included_separator
+              if klass.include?(class_name)
+                is_mine = true
+                break
+              end
+            else
+              if klass.include?(class_name) && klass.size == class_name.size
+                is_mine = true
+                break
+              end              
+            end
+          end
+        end
+        if !is_mine
+          # procurando por GEM
+          @classes.each do |klass|
+            #TODO Arrumar isso com uma expressao regular
+            if klass.include?(first_class_name) && klass.size == first_class_name.size
+              is_mine = true
+              break
+            end
+          end          
+        end
+        
+        return is_mine
       end
       
       def is_external?
