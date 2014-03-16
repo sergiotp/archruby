@@ -285,6 +285,28 @@ module ArchChecker
         args.map! {|sub_tree| process sub_tree}
       end
       
+      def process_cvdecl exp
+        _, variable_name, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_cvar exp
+        _, variable_name = exp
+      end
+      
+      def process_until exp
+        _, condition, *args = exp
+        true_clause = args.pop
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_yield exp
+        _, *body = exp
+        if !body.empty?
+          body.map! {|sub_tree| process sub_tree}
+        end
+      end
+      
       def ruby_parser
         RubyParser.new
       end

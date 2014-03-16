@@ -19,7 +19,6 @@ describe ArchChecker::Ruby::Parser do
   end
   
   it 'extract correct classes and depencies' do
-    puts ruby_parser.classes_and_dependencies.inspect
     ruby_parser.classes_and_dependencies.keys.count.should be_eql(3)
     ruby_parser.classes_and_dependencies['Teste'].count.should be_eql(7)
     ruby_parser.classes_and_dependencies['BostaOutra'].count.should be_eql(1)
