@@ -3,7 +3,12 @@ require 'spec_helper'
 describe ArchChecker::Architecture::Architecture do
   let(:parser) { ArchChecker::Architecture::Parser.new(File.expand_path('../../fixtures/new_arch_definition.yml', __FILE__), File.expand_path('../../dummy_app/', __FILE__)) }
   let(:architecture) { ArchChecker::Architecture::Architecture.new(parser.modules) }
-
+  
+  it 'have an unknown_module' do
+    architecture.unknown_module.should_not be_nil
+    architecture.unknown_module.name.should be_eql("unknown")
+  end
+  
   it 'detect the amount of architecture erosion correctly' do
     architecture.verify
     architecture.constraints_breaks.count.should == 4
@@ -31,7 +36,8 @@ describe ArchChecker::Architecture::Architecture do
   it 'return the module name correctly' do
     architecture.module_name("ActionController").should be_eql("actioncontroller")
     architecture.module_name("Koala").should be_eql("facebook")
-    architecture.module_name("User").should be_eql("model")    
+    architecture.module_name("User").should be_eql("model")
+    architecture.module_name("NAOTEMNAO").should be_eql(architecture.unknown_module.name)
   end
   
   it 'return the correct amount of time that an module access another module' do

@@ -2,11 +2,12 @@ module ArchChecker
   module Architecture
     
     class Architecture
-      attr_reader :constraints_breaks, :modules
+      attr_reader :constraints_breaks, :modules, :unknown_module
       
       def initialize modules
         @modules = modules
         @constraints_breaks = []
+        @unknown_module = @modules.select{ |module_definition| module_definition.name == "unknown" }.first
       end
 
       def verify
@@ -39,7 +40,11 @@ module ArchChecker
             break
           end
         end
-        module_name_to_return
+        if module_name_to_return.eql? ''
+          @unknown_module.name
+        else
+          module_name_to_return
+        end
       end
       
       def how_many_access_to module_origin, module_dest
