@@ -24,7 +24,9 @@ module ArchChecker
             exit(e.status_code)
           end          
           @modules << module_definition
-        end        
+        end
+        config_definition = ArchChecker::Architecture::ConfigDefinition.new "unknown", {"gems"=>"unknown", "files"=>"", "allowed"=>"", "forbidden" => ""} 
+        @modules << ArchChecker::Architecture::ModuleDefinition.new(config_definition, @base_path)
       end
       
       def yaml_parser
