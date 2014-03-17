@@ -97,7 +97,6 @@ module ArchChecker
         modules.each do |module_definiton|
           module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
-          
           module_definiton.allowed_modules.each do |allowed_module_name|
             module_target = allowed_module_name
             node_dest = nodes[allowed_module_name]
