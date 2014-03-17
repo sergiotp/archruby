@@ -32,6 +32,13 @@ def testedemetodosozinho
   
 end
 
+module Modulo::Composto
+  class TesteNele
+  end
+  class TesteDenovo
+  end
+end
+  
 module Modulo
   class ClasseDentrodoModulo
     def teste

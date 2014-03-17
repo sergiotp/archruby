@@ -16,6 +16,7 @@ describe ArchChecker::Ruby::Parser do
     ruby_parser.classes.should include("Teste")
     ruby_parser.classes.should include("BostaOutra")
     ruby_parser.classes.should include("Multiple::Access::Teste")
+    puts ruby_parser.classes.inspect
   end
   
   it 'extract correct classes and depencies' do

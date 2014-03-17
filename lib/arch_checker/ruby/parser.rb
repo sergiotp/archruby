@@ -40,6 +40,7 @@ module ArchChecker
           # cai aqui quando a definicao é algo do tipo: class Teste::De end
           get_complete_class_name class_name
           @classes << @complete_class_name.join("::")
+          @complete_class_name = []
         end
         args.map! {|sub_tree| process sub_tree}
       end
@@ -269,7 +270,13 @@ module ArchChecker
       
       def process_module exp
         _, module_name, *args = exp
-        @module_names.push module_name.to_s
+        if module_name.class == Symbol
+          @module_names.push module_name.to_s
+        else
+          get_complete_class_name(module_name)
+          @module_names.push @complete_class_name.join('::')
+          @complete_class_name = []
+        end        
         args.map! {|sub_tree| process sub_tree}
         @module_names.pop
       end
@@ -305,6 +312,64 @@ module ArchChecker
         if !body.empty?
           body.map! {|sub_tree| process sub_tree}
         end
+      end
+      
+      def process_dot2 exp
+        _, first, second = exp
+      end
+      
+      def process_zsuper exp
+        _ = exp
+      end
+      
+      def process_op_asgn_or exp
+        _, first, second = exp
+        process first
+        process second
+      end
+      
+      def process_match3 exp
+        _, regular_expression, *args = exp
+        args.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_break exp
+        _ = exp
+      end
+      
+      def process_dregx exp
+        _, regex = exp
+      end
+      
+      def process_super exp
+        _, args = exp
+        process args
+      end
+      
+      def process_ensure exp
+        _, rescue_clause, *ensure_clause = exp
+        process rescue_clause
+        ensure_clause.map! {|sub_tree| process sub_tree}
+      end
+      
+      def process_op_asgn2 exp
+        _, left_assign, variable, method, args = exp
+        process left_assign
+        process args
+      end
+      
+      def process_splat exp
+        _, left_assign = exp
+        process left_assign
+      end
+      
+      def process_dxstr exp
+        # shelling out
+        _ = exp
+      end
+      
+      def process_dot3 exp
+        _ = exp
       end
       
       def ruby_parser
