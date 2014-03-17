@@ -52,6 +52,7 @@ module ArchChecker
         if first_class_name.empty?
           #pocurando por um match exato de dependencia
           first_name = splited_class_name[1]
+          splited_class_name.shift # retirando o elemento ''
           class_name = splited_class_name.join("::")
           @classes.each do |klass|
             #TODO Arrumar isso com uma expressao regular
@@ -60,7 +61,7 @@ module ArchChecker
               break
             end
           end
-          if !is_mine
+          if !is_mine && !@config_definition.gems.empty?
             @classes.each do |klass|
               #TODO Arrumar isso com uma expressao regular
               if klass.include?(first_name) && klass.size == first_name.size

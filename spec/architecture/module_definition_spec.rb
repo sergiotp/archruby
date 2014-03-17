@@ -8,12 +8,24 @@ describe ArchChecker::Architecture::ModuleDefinition do
     base_directory = File.expand_path('../../dummy_app/', __FILE__)
     config_definition = ArchChecker::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = ArchChecker::Architecture::ModuleDefinition.new(config_definition, base_directory)
+    module_definition.classes.should include("Teste::Testando::VaiAcessar")
     module_definition.classes.should include("Teste")
     module_definition.classes.should include("User")
     module_definition.dependencies.should include("ActiveRecord::Base")
-    module_definition.dependencies.should include("OutraClasse::De::Teste")    
-    module_definition.classes_and_dependencies.first.keys.should include("Teste")
+    module_definition.dependencies.should include("OutraClasse::De::Teste")
+    puts module_definition.classes_and_dependencies.first.should be_eql({})
+    module_definition.classes_and_dependencies[1].keys.should include("Teste")
     module_definition.classes_and_dependencies.last.keys.should include("User")
+  end
+  
+  it 'build the dependencies correctly' do
+    base_directory = File.expand_path('../../dummy_app/', __FILE__)
+    config_definition = ArchChecker::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
+    module_definition = ArchChecker::Architecture::ModuleDefinition.new(config_definition, base_directory)
+    module_definition.dependencies.count.should be_eql(6)
+    module_definition.dependencies.should include("Koala::Facebook::API")
+    module_definition.dependencies.should include("OutraClasse::De::Teste")
+    module_definition.dependencies.should include("ActiveRecord::Base")
   end
   
   it 'return true when the module has a particular class' do
@@ -24,6 +36,9 @@ describe ArchChecker::Architecture::ModuleDefinition do
     module_definition.is_mine?("User").should be_true
     module_definition.is_mine?("ActiveRecord").should be_false
     module_definition.is_mine?("QualquerCoisa").should be_false
+    module_definition.is_mine?("::User").should be_true
+    module_definition.is_mine?("::User::Nao::Sei").should be_false
+    module_definition.is_mine?("Testando::VaiAcessar").should be_true
 
     config_definition = ArchChecker::Architecture::ConfigDefinition.new 'actioncontroller', parsed_yaml['actioncontroller']
     module_definition = ArchChecker::Architecture::ModuleDefinition.new(config_definition, base_directory)
@@ -36,8 +51,9 @@ describe ArchChecker::Architecture::ModuleDefinition do
     config_definition = ArchChecker::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = ArchChecker::Architecture::ModuleDefinition.new(config_definition, base_directory)
     required_breaks = module_definition.verify_required architecture
-    required_breaks.count.should == 1
-    required_breaks.first.class_origin.should == "Teste"
+    required_breaks.count.should == 2
+    required_breaks.first.class_origin.should == "Teste::Testando::VaiAcessar"
+    required_breaks.last.class_origin.should == "Teste"    
   end
   
   it 'verify forbidden constraint correctly' do

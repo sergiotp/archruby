@@ -11,7 +11,7 @@ describe ArchChecker::Architecture::Architecture do
   
   it 'detect the amount of architecture erosion correctly' do
     architecture.verify
-    architecture.constraints_breaks.count.should == 4
+    architecture.constraints_breaks.count.should == 5
   end
   
   it 'raise and error if how_many_break is called without verify the architecture' do 
@@ -24,7 +24,7 @@ describe ArchChecker::Architecture::Architecture do
     controller_breaks.should be_eql(1)
     
     controller_breaks = architecture.how_many_break "model", ArchChecker::Architecture::ConstraintBreak::ABSENSE
-    controller_breaks.should be_eql(1)
+    controller_breaks.should be_eql(2)
     
     controller_breaks = architecture.how_many_break "model", ArchChecker::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
@@ -42,5 +42,6 @@ describe ArchChecker::Architecture::Architecture do
   
   it 'return the correct amount of time that an module access another module' do
     architecture.how_many_access_to("controller", "model").should be_eql(2)
+    architecture.how_many_access_to("model", "controller").should be_eql(1)
   end
 end
