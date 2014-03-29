@@ -1,9 +1,9 @@
 module ArchChecker
   module Architecture
-    
+
     class Architecture
       attr_reader :constraints_breaks, :modules, :unknown_module
-      
+
       def initialize modules
         @modules = modules
         @constraints_breaks = []
@@ -20,18 +20,18 @@ module ArchChecker
         @constraints_breaks = @constraints_breaks.flatten
         @constraints_breaks
       end
-      
-      def how_many_break module_name, constraint_type
+
+      def how_many_break module_name, module_target, constraint_type
         raise ArchitectureNotVerified if @constraints_breaks.empty?
         count = 0
         @constraints_breaks.each do |constraint_break|
-          if constraint_break.type == constraint_type && constraint_break.module_origin == module_name
+          if constraint_break.type == constraint_type && constraint_break.module_origin == module_name && constraint_break.module_target == module_target
             count += 1
           end
         end
         count
       end
-      
+
       def module_name class_name
         module_name_to_return = ''
         @modules.each do |module_name|
@@ -46,7 +46,7 @@ module ArchChecker
           module_name_to_return
         end
       end
-      
+
       def how_many_access_to module_origin, module_dest
         module_origin = search_module module_origin
         count = 0
@@ -57,8 +57,12 @@ module ArchChecker
           end
         end
         count
-      end      
-    
+      end
+
+      def is_ruby_internals? module_name
+        module_name == ArchChecker::Ruby::STD_LIB_NAME || module_name == ArchChecker::Ruby::CORE_LIB_NAME
+      end
+
     private
 
       def search_module module_name
@@ -68,8 +72,8 @@ module ArchChecker
           end
         end
       end
-    
+
     end
-  
+
   end
 end

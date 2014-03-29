@@ -1,13 +1,15 @@
 module ArchChecker
   module Architecture
-    
+
     class ModuleDefinition
-      
+
       ALLOWED_CONSTRAINTS = ['required', 'allowed', 'forbidden']
-      
+
       attr_reader :name, :allowed_modules, :required_modules, :forbidden_modules,
-      :classes, :dependencies, :classes_and_dependencies
-      
+      :dependencies, :classes_and_dependencies
+
+      attr_accessor :classes
+
       def initialize config_definition, base_directory
         @config_definition = config_definition
         @name = @config_definition.module_name
@@ -20,18 +22,20 @@ module ArchChecker
         @dependencies = []
         @classes_and_dependencies = []
         extract_content_of_files
-        extract_dependencies        
+        extract_dependencies
       end
-            
+
       def extract_content_of_files file_extractor = ArchChecker::Architecture::FileContent
+        return if !@classes.empty?
         file_extractor = file_extractor.new(@base_directory)
         @config_definition.files.each do |file|
           file_content = file_extractor.all_content_from_directory file
           @files_and_contents << file_content
         end
       end
-      
+
       def extract_dependencies ruby_parser = ArchChecker::Ruby::Parser
+        return if !@classes.empty?
         @files_and_contents.each do |file_and_content|
           file_and_content.each do |file_name, content|
             parser = ruby_parser.new content
@@ -44,7 +48,7 @@ module ArchChecker
         @classes.flatten!
         @dependencies.flatten!
       end
-      
+
       def is_mine? class_name
         splited_class_name = class_name.split('::')
         first_class_name = splited_class_name.first
@@ -86,7 +90,7 @@ module ArchChecker
               if klass.include?(class_name) && klass.size == class_name.size
                 is_mine = true
                 break
-              end              
+              end
             end
           end
         end
@@ -98,20 +102,20 @@ module ArchChecker
               is_mine = true
               break
             end
-          end          
+          end
         end
-        
+
         return is_mine
       end
-      
+
       def is_external?
         !@config_definition.gems.empty?
       end
-      
+
       def is_empty?
         @classes.empty?
       end
-      
+
       def verify_constraints architecture
         required_breaks = verify_required architecture
         forbidden_breaks = verify_forbidden architecture
@@ -120,7 +124,7 @@ module ArchChecker
         all_constraints_breaks.delete(nil)
         all_constraints_breaks
       end
-                  
+
       # Verifica todas as classes do modulo
       # Cada uma deve, de alguma forma, depender dos modulos que estao listados como required
       def verify_required architecture
@@ -128,7 +132,7 @@ module ArchChecker
         breaks = []
         @classes_and_dependencies.each_with_index do |class_and_depencies, index|
           if class_and_depencies.empty?
-            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @config_definition.required_modules.first, :class_origin => @classes[index], :msg => "not implement a required module")  
+            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @config_definition.required_modules.first, :class_origin => @classes[index], :msg => "not implement a required module")
             next
           end
           class_and_depencies.each do |class_name, dependencies|
@@ -143,7 +147,7 @@ module ArchChecker
               end
             end
           end
-        end        
+        end
         breaks
       end
 
@@ -154,15 +158,16 @@ module ArchChecker
           class_and_depencies.each do |class_name, dependencies|
             dependencies.each do |dependency|
               module_name = architecture.module_name(dependency.class_name)
+              next if architecture.is_ruby_internals? module_name
               if @config_definition.forbidden_modules.include? module_name
                 breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module which is forbidden")
               end
             end
           end
         end
-        breaks        
+        breaks
       end
-      
+
       def verify_allowed architecture
         return if @config_definition.allowed_modules.empty?
         breaks = []
@@ -170,6 +175,7 @@ module ArchChecker
           class_and_depencies.each do |class_name, dependencies|
             dependencies.each do |dependency|
               module_name = architecture.module_name(dependency.class_name)
+              next if architecture.is_ruby_internals? module_name
               if module_name != self.name && !@config_definition.allowed_modules.include?(module_name)
                 breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module not allowed")
               end

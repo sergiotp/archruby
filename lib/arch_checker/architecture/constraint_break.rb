@@ -1,7 +1,8 @@
 module ArchChecker
   module Architecture
     class ConstraintBreak
-      attr_reader :type, :class_origin, :line_origin, :class_target, :module_origin, :module_target, :msg
+      attr_reader :type, :class_origin, :line_origin, :class_target, :module_origin,
+      :module_target, :msg
 
       ABSENSE = "absence"
       DIVERGENCE = "divergence"
