@@ -23,6 +23,7 @@ module ArchChecker
         internal_nodes = []
         external_nodes = []
         modules.each do |module_definiton|
+          next if module_definiton.name == ArchChecker::Ruby::STD_LIB_NAME || module_definiton.name == ArchChecker::Ruby::CORE_LIB_NAME
           if module_definiton.is_external?
             nodes[module_definiton.name] = external.add_nodes(module_definiton.name, "shape" => "parallelogram", "color" => "gray60", "style" => "filled")
             external_nodes << nodes[module_definiton.name]
@@ -47,6 +48,7 @@ module ArchChecker
 
           module_definiton.dependencies.each do |class_name|
             module_dest = architecture.module_name class_name
+            next if module_dest == ArchChecker::Ruby::STD_LIB_NAME || module_dest == ArchChecker::Ruby::CORE_LIB_NAME
             how_many_access = architecture.how_many_access_to module_name, module_dest
             if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
               edges[module_name][:edges] << module_dest
@@ -98,10 +100,13 @@ module ArchChecker
         end
 
         modules.each do |module_definiton|
+          next if module_definiton.name == ArchChecker::Ruby::STD_LIB_NAME || module_definiton.name == ArchChecker::Ruby::CORE_LIB_NAME
           module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
-          puts module_definiton.name.inspect
-          puts module_definiton.classes.inspect
+           puts module_definiton.name.inspect
+           puts module_definiton.classes.inspect
+           puts module_definiton.dependencies.inspect
+           puts
           module_definiton.allowed_modules.each do |allowed_module_name|
             module_target = allowed_module_name
             node_dest = nodes[allowed_module_name]

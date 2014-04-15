@@ -16,7 +16,7 @@ module ArchChecker
       'Shellwords', 'Singleton', 'UNIXServer', 'UNIXSocket', 'TCPServer', 'BasicSocket', 'Socket',
       'StringIO', 'StringScanner', 'Sync', 'Syslog', 'Tempfile', 'ConditionVariable', 'Queue',
       'SizedQueue', 'ThWait', 'Timeout', 'TSort', 'WeakRef', 'WEBrick', 'XMLRPC', 'YAML',
-      'Zlib'
+      'Zlib', 'Iconv'
     ]
   end
 end

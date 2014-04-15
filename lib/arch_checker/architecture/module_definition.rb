@@ -160,6 +160,7 @@ module ArchChecker
               module_name = architecture.module_name(dependency.class_name)
               next if architecture.is_ruby_internals? module_name
               if @config_definition.forbidden_modules.include? module_name
+                next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
                 breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module which is forbidden")
               end
             end
@@ -177,6 +178,7 @@ module ArchChecker
               module_name = architecture.module_name(dependency.class_name)
               next if architecture.is_ruby_internals? module_name
               if module_name != self.name && !@config_definition.allowed_modules.include?(module_name)
+                next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
                 breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module not allowed")
               end
             end
