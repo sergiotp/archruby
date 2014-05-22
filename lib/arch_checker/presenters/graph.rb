@@ -8,13 +8,13 @@ module ArchChecker
       def render architecture
         modules = architecture.modules
 
-        g = GraphViz.new(:G, :overlap => false, :splines => true, :sep => "+40,40", :nodesep => 1)
+        g = GraphViz.new(:G)
 
         g.edge[:color] = "black"
         g.edge[:style] = "filled"
         g.edge[:label] = ""
 
-        internal = g.subgraph("internal", "label" => "Internal", "color" => "black", "rank" => "same")
+        internal = g.subgraph("internal", "label" => "Internal", "color" => "black")
 
         external = g.subgraph("external", "label" => "External", "color" => "black", "rank" => "same")
 
@@ -106,6 +106,7 @@ module ArchChecker
            puts module_definiton.name.inspect
            puts module_definiton.classes.inspect
            puts module_definiton.dependencies.inspect
+           puts module_definiton.classes_and_dependencies.inspect
            puts
           module_definiton.allowed_modules.each do |allowed_module_name|
             module_target = allowed_module_name
@@ -123,7 +124,7 @@ module ArchChecker
           end
         end
 
-        g.output( :none => "architecture2.dot" )
+        g.output( :png => "architecture2.png" )
       end
 
     end

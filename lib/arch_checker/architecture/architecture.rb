@@ -50,10 +50,14 @@ module ArchChecker
       def how_many_access_to module_origin, module_dest
         module_origin = search_module module_origin
         count = 0
-        module_origin.dependencies.each do |dependency_class_name|
-          dependency_module_name = module_name dependency_class_name
-          if dependency_module_name == module_dest
-            count += 1
+        module_origin.classes_and_dependencies.each do |class_dependencies|
+          class_dependencies.each do |klass, dependencies|
+            dependencies.each do |dependency|
+              dependency_module_name = module_name dependency.class_name
+              if dependency_module_name == module_dest
+                count += 1
+              end
+            end
           end
         end
         count
