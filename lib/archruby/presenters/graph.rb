@@ -1,6 +1,6 @@
 require 'graphviz'
 
-module ArchChecker
+module Archruby
   module Presenters
 
     class Graph
@@ -23,7 +23,7 @@ module ArchChecker
         internal_nodes = []
         external_nodes = []
         modules.each do |module_definiton|
-          next if module_definiton.name == ArchChecker::Ruby::STD_LIB_NAME || module_definiton.name == ArchChecker::Ruby::CORE_LIB_NAME
+          next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           if module_definiton.is_external?
             nodes[module_definiton.name] = external.add_nodes(module_definiton.name, "shape" => "parallelogram", "color" => "gray60", "style" => "filled")
             external_nodes << nodes[module_definiton.name]
@@ -48,7 +48,7 @@ module ArchChecker
 
           module_definiton.dependencies.each do |class_name|
             module_dest = architecture.module_name class_name
-            next if module_dest == ArchChecker::Ruby::STD_LIB_NAME || module_dest == ArchChecker::Ruby::CORE_LIB_NAME
+            next if module_dest == Archruby::Ruby::STD_LIB_NAME || module_dest == Archruby::Ruby::CORE_LIB_NAME
             how_many_access = architecture.how_many_access_to module_name, module_dest
             if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
               edges[module_name][:edges] << module_dest
@@ -68,16 +68,16 @@ module ArchChecker
           node_found = false
           edges_objs.each do |edge|
             if edge.node_one == module_origin && edge.node_two == module_target
-              if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
+              if contraint_type == Archruby::Architecture::ConstraintBreak::ABSENSE
                 edge.set do |e|
-                  e.headlabel = "X (##{architecture.how_many_break(module_origin, module_target,  ArchChecker::Architecture::ConstraintBreak::ABSENSE)})"
+                  e.headlabel = "X (##{architecture.how_many_break(module_origin, module_target,  Archruby::Architecture::ConstraintBreak::ABSENSE)})"
                   e.color = "red"
                   e.style = "bold"
                   e.minlen = 2
                 end
               else
                 edge.set do |e|
-                  e.headlabel = "! (##{architecture.how_many_break(module_origin, module_target, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)})"
+                  e.headlabel = "! (##{architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::DIVERGENCE)})"
                   e.color = "orange"
                   e.style = "bold"
                   e.minlen = 2
@@ -89,18 +89,18 @@ module ArchChecker
           end
 
           if !node_found
-            if contraint_type == ArchChecker::Architecture::ConstraintBreak::ABSENSE
-              break_count = architecture.how_many_break(module_origin, module_target, ArchChecker::Architecture::ConstraintBreak::ABSENSE)
+            if contraint_type == Archruby::Architecture::ConstraintBreak::ABSENSE
+              break_count = architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::ABSENSE)
               edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :headlabel => "X (##{break_count})", 'style' => 'bold', :minlen => 2)
             else
-              break_count = architecture.how_many_break(module_origin, module_target, ArchChecker::Architecture::ConstraintBreak::DIVERGENCE)
+              break_count = architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::DIVERGENCE)
               edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :headlabel => "! (##{break_count})", 'style' => 'bold', :minlen => 2)
             end
           end
         end
 
         modules.each do |module_definiton|
-          next if module_definiton.name == ArchChecker::Ruby::STD_LIB_NAME || module_definiton.name == ArchChecker::Ruby::CORE_LIB_NAME
+          next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
            puts module_definiton.name.inspect

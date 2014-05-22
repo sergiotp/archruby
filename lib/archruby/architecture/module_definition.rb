@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Architecture
 
     class ModuleDefinition
@@ -25,7 +25,7 @@ module ArchChecker
         extract_dependencies
       end
 
-      def extract_content_of_files file_extractor = ArchChecker::Architecture::FileContent
+      def extract_content_of_files file_extractor = Archruby::Architecture::FileContent
         return if !@classes.empty?
         file_extractor = file_extractor.new(@base_directory)
         @config_definition.files.each do |file|
@@ -34,7 +34,7 @@ module ArchChecker
         end
       end
 
-      def extract_dependencies ruby_parser = ArchChecker::Ruby::Parser
+      def extract_dependencies ruby_parser = Archruby::Ruby::Parser
         return if !@classes.empty?
         @files_and_contents.each do |file_and_content|
           file_and_content.each do |file_name, content|
@@ -132,7 +132,7 @@ module ArchChecker
         breaks = []
         @classes_and_dependencies.each_with_index do |class_and_depencies, index|
           if class_and_depencies.empty?
-            breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @config_definition.required_modules.first, :class_origin => @classes[index], :msg => "not implement a required module")
+            breaks << Archruby::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => @config_definition.required_modules.first, :class_origin => @classes[index], :msg => "not implement a required module")
             next
           end
           class_and_depencies.each do |class_name, dependencies|
@@ -143,7 +143,7 @@ module ArchChecker
             end
             @config_definition.required_modules.each do |required_module|
               if !dependency_module_names.include?(required_module)
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => required_module, :class_origin => class_name, :msg => "not implement a required module")
+                breaks << Archruby::Architecture::ConstraintBreak.new(:type => 'absence', :module_origin => self.name, :module_target => required_module, :class_origin => class_name, :msg => "not implement a required module")
               end
             end
           end
@@ -161,7 +161,7 @@ module ArchChecker
               next if architecture.is_ruby_internals? module_name
               if @config_definition.forbidden_modules.include? module_name
                 next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module which is forbidden")
+                breaks << Archruby::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module which is forbidden")
               end
             end
           end
@@ -179,7 +179,7 @@ module ArchChecker
               next if architecture.is_ruby_internals? module_name
               if module_name != self.name && !@config_definition.allowed_modules.include?(module_name)
                 next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
-                breaks << ArchChecker::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module not allowed")
+                breaks << Archruby::Architecture::ConstraintBreak.new(:type => 'divergence', :class_origin => class_name, :line_origin => dependency.line_number, :class_target => dependency.class_name, :module_origin => self.name, :module_target => module_name, :msg => "accessing a module not allowed")
               end
             end
           end

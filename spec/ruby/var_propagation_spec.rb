@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ArchChecker::Ruby::VarPropagation do
+describe Archruby::Ruby::VarPropagation do
   it 'storage var propagation correctly' do
-    var_propagation = ArchChecker::Ruby::VarPropagation.new
+    var_propagation = Archruby::Ruby::VarPropagation.new
     var_propagation.push :a, 1, "ClassTeste"
     var_propagation.push :a, 2
     var_propagation.push :a, 3
@@ -10,7 +10,7 @@ describe ArchChecker::Ruby::VarPropagation do
   end
 
   it 'put type correctly' do
-    var_propagation = ArchChecker::Ruby::VarPropagation.new
+    var_propagation = Archruby::Ruby::VarPropagation.new
     var_propagation.push :a, 1
     var_propagation.put_type :a, "Teste"
     var_propagation.vars.first[:a][:type].should be_eql("Teste")

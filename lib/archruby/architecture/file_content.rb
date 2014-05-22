@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Architecture
     class FileContent
 
@@ -6,7 +6,7 @@ module ArchChecker
         # base_directory "/Users/sergiomiranda/Labs/ruby_arch_checker/arch_checker/spec/dummy_app/app"
         @base_directory = base_directory
       end
-      
+
       def all_content_from_directory directory
         return if directory.nil? || directory.eql?("")
         content = {}
@@ -18,7 +18,7 @@ module ArchChecker
         end
         content
       end
-      
+
     end
   end
 end

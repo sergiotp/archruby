@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Ruby
     class VarPropagation
       attr_reader :vars

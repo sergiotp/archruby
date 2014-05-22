@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ArchChecker::Ruby::Parser do
+describe Archruby::Ruby::Parser do
   let(:ruby_content_file) { File.open(File.expand_path('../../fixtures/ruby_example.rb', __FILE__), 'r').read }
-  let(:ruby_parser) { ArchChecker::Ruby::Parser.new(ruby_content_file) }
+  let(:ruby_parser) { Archruby::Ruby::Parser.new(ruby_content_file) }
 
   it 'should parse ruby files correctly and return the dependencies' do
     ruby_parser.dependencies.should include("BostadeTeste::Testado")

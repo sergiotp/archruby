@@ -1,7 +1,7 @@
 require 'ruby_parser'
 require 'sexp_processor'
 
-module ArchChecker
+module Archruby
   module Ruby
 
     class Parser < SexpInterpreter
@@ -16,7 +16,7 @@ module ArchChecker
         @classes_and_dependencies = {}
         @module_names = []
         @complete_class_name = []
-        @var_propagation = ArchChecker::Ruby::VarPropagation.new
+        @var_propagation = Archruby::Ruby::VarPropagation.new
         parse
       end
 
@@ -78,7 +78,7 @@ module ArchChecker
         return if @classes.empty?
         class_name = @classes.last
         @classes_and_dependencies[class_name] = [] if @classes_and_dependencies[class_name].nil?
-        @classes_and_dependencies[class_name] << ArchChecker::Architecture::Dependency.new(const_name, line_number)
+        @classes_and_dependencies[class_name] << Archruby::Architecture::Dependency.new(const_name, line_number)
       end
 
       def add_dependency const_name
@@ -119,7 +119,7 @@ module ArchChecker
             end
           end
         end
-        @var_propagation = ArchChecker::Ruby::VarPropagation.new
+        @var_propagation = Archruby::Ruby::VarPropagation.new
         @variables = []
       end
 

@@ -1,8 +1,8 @@
 require 'yaml'
 
-module ArchChecker
+module Archruby
   module Presenters
-   
+
     class Yaml
       def render architecture
         constraints_breaks = architecture.constraints_breaks

@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Architecture
 
     class Architecture
@@ -64,7 +64,7 @@ module ArchChecker
       end
 
       def is_ruby_internals? module_name
-        module_name == ArchChecker::Ruby::STD_LIB_NAME || module_name == ArchChecker::Ruby::CORE_LIB_NAME
+        module_name == Archruby::Ruby::STD_LIB_NAME || module_name == Archruby::Ruby::CORE_LIB_NAME
       end
 
     private

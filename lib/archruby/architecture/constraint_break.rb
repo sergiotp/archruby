@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Architecture
     class ConstraintBreak
       attr_reader :type, :class_origin, :line_origin, :class_target, :module_origin,

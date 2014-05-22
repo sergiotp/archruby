@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Ruby
     CORE_LIB_NAME = 'ruby_core_lib'
     CORE_LIBRARY_CLASSES = [

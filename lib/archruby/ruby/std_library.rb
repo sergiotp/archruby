@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Ruby
     STD_LIB_NAME = 'ruby_str_lib'
     STD_LIBRARY_CLASSES = [

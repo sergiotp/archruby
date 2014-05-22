@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ArchChecker::Architecture::Architecture do
-  let(:parser) { ArchChecker::Architecture::Parser.new(File.expand_path('../../fixtures/new_arch_definition.yml', __FILE__), File.expand_path('../../dummy_app/', __FILE__)) }
-  let(:architecture) { ArchChecker::Architecture::Architecture.new(parser.modules) }
+describe Archruby::Architecture::Architecture do
+  let(:parser) { Archruby::Architecture::Parser.new(File.expand_path('../../fixtures/new_arch_definition.yml', __FILE__), File.expand_path('../../dummy_app/', __FILE__)) }
+  let(:architecture) { Archruby::Architecture::Architecture.new(parser.modules) }
 
   it 'have an unknown_module' do
     architecture.unknown_module.should_not be_nil
@@ -15,22 +15,22 @@ describe ArchChecker::Architecture::Architecture do
   end
 
   it 'raise and error if how_many_break is called without verify the architecture' do
-    lambda{ architecture.how_many_break("module_name", "module_target_name", "constraint_type") }.should raise_error(ArchChecker::ArchitectureNotVerified)
+    lambda{ architecture.how_many_break("module_name", "module_target_name", "constraint_type") }.should raise_error(Archruby::ArchitectureNotVerified)
   end
 
   it 'return the amount of constraint breaks correctly' do
     architecture.verify
     puts architecture.constraints_breaks.inspect
-    controller_breaks = architecture.how_many_break "controller", "facebook", ArchChecker::Architecture::ConstraintBreak::DIVERGENCE
+    controller_breaks = architecture.how_many_break "controller", "facebook", Archruby::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
 
-    controller_breaks = architecture.how_many_break "model", "activerecord", ArchChecker::Architecture::ConstraintBreak::ABSENSE
+    controller_breaks = architecture.how_many_break "model", "activerecord", Archruby::Architecture::ConstraintBreak::ABSENSE
     controller_breaks.should be_eql(2)
 
-    controller_breaks = architecture.how_many_break "model", "facebook", ArchChecker::Architecture::ConstraintBreak::DIVERGENCE
+    controller_breaks = architecture.how_many_break "model", "facebook", Archruby::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
 
-    controller_breaks = architecture.how_many_break "view", "model", ArchChecker::Architecture::ConstraintBreak::DIVERGENCE
+    controller_breaks = architecture.how_many_break "view", "model", Archruby::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
   end
 

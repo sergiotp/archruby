@@ -1,4 +1,4 @@
-module ArchChecker
+module Archruby
   module Architecture
     class Dependency
       attr_reader :class_name, :line_number

@@ -1,1 +1,1 @@
-require 'arch_checker'
+require 'archruby'
