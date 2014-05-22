@@ -3,18 +3,18 @@
 lib = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require 'arch_checker'
+require 'archruby'
 
 config_path = nil
-app_root_path = nil 
+app_root_path = nil
 ARGV.each do |arg|
   option, value = arg.split('=')
   config_path = value if option.eql?('--config-file')
   app_root_path = value if option.eql?('--app_root_path')
 end
 
-arch_checker = ArchChecker::ExtractArchitecture.new(config_path, app_root_path)
+arch_checker = Archruby::ExtractArchitecture.new(config_path, app_root_path)
 constraints_breaks = arch_checker.verify
 
-ArchChecker::Presenters::Yaml.new.render(arch_checker.architecture)
-ArchChecker::Presenters::Graph.new.render(arch_checker.architecture)
+Archruby::Presenters::Yaml.new.render(arch_checker.architecture)
+Archruby::Presenters::Graph.new.render(arch_checker.architecture)
