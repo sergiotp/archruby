@@ -137,7 +137,7 @@ module Archruby
               :module_origin => self.name,
               :module_target => @config_definition.required_modules.first,
               :class_origin => @classes[index],
-              :msg => "module ’#{self.name}’ is not allowed to depend on module ’#{@config_definition.required_modules.first}’"
+              :msg => "module #{self.name} is not allowed to depend on module #{@config_definition.required_modules.first}"
             )
             next
           end
