@@ -137,7 +137,7 @@ module Archruby
               :module_origin => self.name,
               :module_target => @config_definition.required_modules.first,
               :class_origin => @classes[index],
-              :msg => "module #{self.name} is not allowed to depend on module #{@config_definition.required_modules.first}"
+              :msg => "not implement a required module"
             )
             next
           end
@@ -199,12 +199,13 @@ module Archruby
               if module_name != self.name && !@config_definition.allowed_modules.include?(module_name)
                 next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
                 breaks << Archruby::Architecture::ConstraintBreak.new(
-                  :type => 'divergence', :class_origin => class_name,
+                  :type => 'divergence',
+                  :class_origin => class_name,
                   :line_origin => dependency.line_number,
                   :class_target => dependency.class_name,
                   :module_origin => self.name,
                   :module_target => module_name,
-                  :msg => "accessing a module not allowed")
+                  :msg => "module #{self.name} is not allowed to depend on module #{module_name}")
               end
             end
           end
