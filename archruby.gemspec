@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Archruby::VERSION
   spec.authors       = ["Sergio Henrique"]
   spec.email         = ["sergiohenriquetp@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Compliance and Architectural Visualization in Ruby systems}
+  spec.summary       = %q{Compliance and Architectural Visualization in Ruby systems}
   spec.homepage      = ""
   spec.license       = "MIT"
 
