@@ -5,7 +5,7 @@ require 'archruby/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "archruby"
-  spec.version       = ArchChecker::VERSION
+  spec.version       = ArchRuby::VERSION
   spec.authors       = ["Sergio Henrique"]
   spec.email         = ["sergiohenriquetp@gmail.com"]
   spec.description   = %q{TODO: Write a gem description}
