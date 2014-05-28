@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'arch_checker/version'
+require 'archruby/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "arch_checker"
+  spec.name          = "archruby"
   spec.version       = ArchChecker::VERSION
   spec.authors       = ["Sergio Henrique"]
   spec.email         = ["sergiohenriquetp@gmail.com"]
@@ -21,7 +21,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
-  spec.add_development_dependency "ruby_parser"
-  spec.add_development_dependency "sexp_processor"
-  spec.add_development_dependency "ruby-graphviz"
+  spec.add_runtime_dependency "ruby_parser"
+  spec.add_runtime_dependency "sexp_processor"
+  spec.add_runtime_dependency "ruby-graphviz"
+
 end

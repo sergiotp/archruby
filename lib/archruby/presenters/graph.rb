@@ -103,11 +103,11 @@ module Archruby
           next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
-           puts module_definiton.name.inspect
-           puts module_definiton.classes.inspect
-           puts module_definiton.dependencies.inspect
-           puts module_definiton.classes_and_dependencies.inspect
-           puts
+           #puts module_definiton.name.inspect
+           #puts module_definiton.classes.inspect
+           #puts module_definiton.dependencies.inspect
+           #puts module_definiton.classes_and_dependencies.inspect
+           #puts
           module_definiton.allowed_modules.each do |allowed_module_name|
             module_target = allowed_module_name
             node_dest = nodes[allowed_module_name]
@@ -124,7 +124,7 @@ module Archruby
           end
         end
 
-        g.output( :png => "architecture2.png" )
+        g.output( :png => "architecture.png" )
       end
 
     end

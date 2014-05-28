@@ -9,7 +9,7 @@ config_path = nil
 app_root_path = nil
 ARGV.each do |arg|
   option, value = arg.split('=')
-  config_path = value if option.eql?('--config-file')
+  config_path = value if option.eql?('--arch_def_file')
   app_root_path = value if option.eql?('--app_root_path')
 end
 
