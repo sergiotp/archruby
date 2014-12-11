@@ -10,6 +10,7 @@ module Archruby
         @config_file = config_file_path
         @base_path = base_path
         @modules = []
+        @type_inference_checker = TypeInferenceChecker.new
         parse
         ruby_std_lib_module
         ruby_core_module
@@ -22,11 +23,18 @@ module Archruby
           begin
             config_definition = Archruby::Architecture::ConfigDefinition.new module_name, definitions
             module_definition = Archruby::Architecture::ModuleDefinition.new config_definition, @base_path
-          rescue ArchChecker::MultipleConstraints => e
+            @type_inference_checker.add_method_deps module_definition.class_methods_and_deps
+            @type_inference_checker.add_method_calls module_definition.class_methods_calls
+          rescue Archruby::MultipleConstraints => e
             STDOUT.puts "The config file is not right: #{e.msg} | err_code: #{e.status_code} | module_definition: #{module_name}"
             exit(e.status_code)
           end
           @modules << module_definition
+          @type_inference_checker.verify_types
+          @type_inference_checker.add_new_deps @modules
+          puts
+          puts "MODULES"
+          puts @modules.inspect
         end
       end
 

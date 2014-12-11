@@ -1,11 +1,13 @@
 class Teste
   include ClassedeTeste
 
-  def method
+  def method param
     a = OutraClasse::De::Teste.new
+    b = User.new
+    b.metodo_teste param
   end
-  
+
   def search_facebook
-    @graph = Koala::Facebook::API.new("access_token_qualquer")    
+    
   end
 end

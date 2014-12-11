@@ -6,7 +6,8 @@ module Archruby
       ALLOWED_CONSTRAINTS = ['required', 'allowed', 'forbidden']
 
       attr_reader :name, :allowed_modules, :required_modules, :forbidden_modules,
-      :dependencies, :classes_and_dependencies
+      :dependencies, :classes_and_dependencies, :class_methods_and_deps,
+      :class_methods_calls
 
       attr_accessor :classes
 
@@ -21,6 +22,8 @@ module Archruby
         @classes = []
         @dependencies = []
         @classes_and_dependencies = []
+        @class_methods_and_deps = []
+        @class_methods_calls = []
         extract_content_of_files
         extract_dependencies
       end
@@ -42,11 +45,42 @@ module Archruby
             @classes << parser.classes
             @dependencies << parser.dependencies
             @classes_and_dependencies << parser.classes_and_dependencies
+            @class_methods_and_deps << parser.type_inference
+            @class_methods_calls << parser.method_calls
           end
         end
         @classes << @config_definition.gems
         @classes.flatten!
         @dependencies.flatten!
+        @class_methods_and_deps.flatten!
+        @class_methods_calls.flatten!
+      end
+
+      def add_new_dep class_name, type_inference_dep
+        if !type_inference_dep.class_dep.nil? && !already_has_dependency?(class_name, type_inference_dep.class_dep)
+          new_dep = Archruby::Architecture::Dependency.new(type_inference_dep.class_dep, nil)
+          @dependencies << type_inference_dep.class_dep
+          @classes_and_dependencies.each do |class_and_dep|
+            if class_and_dep.keys.first.eql?(class_name)
+              class_and_dep[class_and_dep.keys.first].push(new_dep)
+            end
+          end
+        end
+      end
+
+      def already_has_dependency? class_name, class_dep
+        has_dep = false
+        @classes_and_dependencies.each do |class_and_dep|
+          if class_and_dep.keys.first.eql?(class_name)
+            class_and_dep[class_and_dep.keys.first].each do |dependency|
+              if dependency.class_name.eql?(class_dep)
+                has_dep = true
+                break
+              end
+            end
+          end
+        end
+        has_dep
       end
 
       def is_mine? class_name

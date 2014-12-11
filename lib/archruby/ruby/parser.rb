@@ -5,7 +5,8 @@ module Archruby
   module Ruby
 
     class Parser < SexpInterpreter
-      attr_reader :dependencies, :classes, :classes_and_dependencies
+      attr_reader :dependencies, :classes, :classes_and_dependencies,
+                  :type_inference, :method_calls
 
       def initialize content
         super()
@@ -17,6 +18,8 @@ module Archruby
         @module_names = []
         @complete_class_name = []
         @var_propagation = Archruby::Ruby::VarPropagation.new
+        @type_inference = []
+        @method_calls = []
         parse
       end
 
@@ -95,18 +98,72 @@ module Archruby
       def process_call exp
         _, receiver, method_name, *args = exp
         process receiver
-
         if receiver && (receiver[0] == :const || receiver[0] == :colon2)
           if @variables
             @var_propagation.push @variables.last, exp.line, @dependencies.last
           end
         end
+        build_type_inference(receiver, method_name, args, exp.line)
         args.map! {|sub_tree| process sub_tree}
+      end
+
+      def build_call_history receiver, method_name, params_name
+        @method_calls << {
+          :class => @classes.last,
+          :method => @current_method_name,
+          :method_arguments => @current_arguments,
+          :class_call => receiver,
+          :method_call => method_name,
+          :method_call_params => params_name
+          }
+      end
+
+      def build_type_inference receiver, method_name, params, line_num
+        if !@local_types.nil? && receiver && receiver[0] == :lvar
+          receiver = @local_types[receiver[1]]
+          params_name = []
+          deps = []
+          params.each do |param|
+            if param[0] == :lvar
+              params_name << param[1]
+              type_inference = TypeInferenceDep.new(
+                :class_source => @classes.last,
+                :class_dep => @local_types[param[1]],
+                :line_source_num => line_num
+              )
+              deps << type_inference
+            elsif param[0] == :call
+              process param
+              type_inference = TypeInferenceDep.new(
+                :class_source => @classes.last,
+                :class_dep => @dependencies.last,
+                :line_source_num => line_num
+              )
+              deps << type_inference
+            end
+          end
+          build_call_history(receiver, method_name, params_name)
+          @type_inference << {
+            :class_name => receiver,
+            :method_name => method_name,
+            :dep => deps
+          } if deps.size >= 1
+        end
+      end
+
+      def extract_arguments arguments
+        _, *arg_vars = arguments
+        if arg_vars[0].class == Symbol
+          @current_arguments = arg_vars
+        end
       end
 
       def process_defn exp
         @variables = []
+        @local_types = {}
         _, method_name, method_arguments, *args = exp
+        @current_method_name = method_name
+        extract_arguments(method_arguments)
         process method_arguments
         args.map! {|sub_tree| process sub_tree}
         @var_propagation.vars.each do |var|
@@ -121,12 +178,18 @@ module Archruby
         end
         @var_propagation = Archruby::Ruby::VarPropagation.new
         @variables = []
+        @current_method_name = nil
+        @current_arguments = nil
       end
 
       def process_lasgn exp
         _, variable_name, *args = exp
+        const_access = args[0][0] == :call unless args[0].nil?
         @variables.push(variable_name) if @variables
         args.map! {|sub_tree| process sub_tree}
+        if @local_types.class == Hash && const_access
+          @local_types[variable_name] = @dependencies.last
+        end
       end
 
       def process_lit exp

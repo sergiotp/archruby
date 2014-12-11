@@ -18,6 +18,14 @@ describe Archruby::Architecture::ModuleDefinition do
     module_definition.classes_and_dependencies.last.keys.should include("User")
   end
 
+  it 'return true if the module has a class dependency' do
+    base_directory = File.expand_path('../../dummy_app/', __FILE__)
+    config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
+    module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
+    module_definition.already_has_dependency?("ActiveRecord::Base").should be_true
+    module_definition.already_has_dependency?("ClassQualquer").should be_false
+  end
+
   it 'build the dependencies correctly' do
     base_directory = File.expand_path('../../dummy_app/', __FILE__)
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
@@ -51,7 +59,6 @@ describe Archruby::Architecture::ModuleDefinition do
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
     required_breaks = module_definition.verify_required architecture
-    puts required_breaks.inspect
     required_breaks.count.should == 2
     required_breaks.first.class_origin.should == "Teste::Testando"
     required_breaks.last.class_origin.should == "Teste"

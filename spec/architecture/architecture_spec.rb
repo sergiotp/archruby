@@ -20,7 +20,6 @@ describe Archruby::Architecture::Architecture do
 
   it 'return the amount of constraint breaks correctly' do
     architecture.verify
-    puts architecture.constraints_breaks.inspect
     controller_breaks = architecture.how_many_break "controller", "facebook", Archruby::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
 
