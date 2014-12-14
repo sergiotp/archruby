@@ -11,7 +11,7 @@ describe Archruby::Architecture::Architecture do
 
   it 'detect the amount of architecture erosion correctly' do
     architecture.verify
-    architecture.constraints_breaks.count.should == 5
+    architecture.constraints_breaks.count.should == 7
   end
 
   it 'raise and error if how_many_break is called without verify the architecture' do
@@ -21,13 +21,13 @@ describe Archruby::Architecture::Architecture do
   it 'return the amount of constraint breaks correctly' do
     architecture.verify
     controller_breaks = architecture.how_many_break "controller", "facebook", Archruby::Architecture::ConstraintBreak::DIVERGENCE
-    controller_breaks.should be_eql(1)
+    controller_breaks.should be_eql(2)
 
     controller_breaks = architecture.how_many_break "model", "activerecord", Archruby::Architecture::ConstraintBreak::ABSENSE
     controller_breaks.should be_eql(2)
 
     controller_breaks = architecture.how_many_break "model", "facebook", Archruby::Architecture::ConstraintBreak::DIVERGENCE
-    controller_breaks.should be_eql(1)
+    controller_breaks.should be_eql(2)
 
     controller_breaks = architecture.how_many_break "view", "model", Archruby::Architecture::ConstraintBreak::DIVERGENCE
     controller_breaks.should be_eql(1)
@@ -41,7 +41,7 @@ describe Archruby::Architecture::Architecture do
   end
 
   it 'return the correct amount of time that an module access another module' do
-    architecture.how_many_access_to("controller", "model").should be_eql(2)
+    architecture.how_many_access_to("controller", "model").should be_eql(4)
     architecture.how_many_access_to("model", "controller").should be_eql(1)
   end
 end

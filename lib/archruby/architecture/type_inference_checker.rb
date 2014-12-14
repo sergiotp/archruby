@@ -22,16 +22,10 @@ module Archruby
       end
 
       def add_new_deps modules
-        puts "METDOSO AND DEPS"
-        puts @method_and_deps.inspect
         @method_and_deps.each do |dep|
           modules.each do |modl|
             if !dep[:class_name].nil? && modl.is_mine?(dep[:class_name])
               dep[:dep].each do |class_dep|
-                puts "ADD NEW DEPPPP"
-                puts modl.inspect
-                puts dep[:class_name].inspect
-                puts class_dep.inspect
                 modl.add_new_dep dep[:class_name], class_dep
               end
             end
@@ -57,7 +51,7 @@ module Archruby
                           add_method_deps([{
                             :class_name => method_call[:class_call],
                             :method_name => method_call[:method_call],
-                            :dep => [new_dep]
+                            :dep => [new_dep] # tem que ser adicionado na posicao param_position
                           }])
                         end
                       end

@@ -32,9 +32,6 @@ module Archruby
           @modules << module_definition
           @type_inference_checker.verify_types
           @type_inference_checker.add_new_deps @modules
-          puts
-          puts "MODULES"
-          puts @modules.inspect
         end
       end
 

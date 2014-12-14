@@ -13,7 +13,6 @@ describe Archruby::Architecture::ModuleDefinition do
     module_definition.classes.should include("User")
     module_definition.dependencies.should include("ActiveRecord::Base")
     module_definition.dependencies.should include("OutraClasse::De::Teste")
-    puts module_definition.classes_and_dependencies.first.should be_eql({})
     module_definition.classes_and_dependencies[1].keys.should include("Teste")
     module_definition.classes_and_dependencies.last.keys.should include("User")
   end
@@ -22,8 +21,8 @@ describe Archruby::Architecture::ModuleDefinition do
     base_directory = File.expand_path('../../dummy_app/', __FILE__)
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
-    module_definition.already_has_dependency?("ActiveRecord::Base").should be_true
-    module_definition.already_has_dependency?("ClassQualquer").should be_false
+    module_definition.already_has_dependency?("User", "ActiveRecord::Base").should be_true
+    module_definition.already_has_dependency?("User", "ClassQualquer").should be_false
   end
 
   it 'build the dependencies correctly' do
@@ -31,7 +30,6 @@ describe Archruby::Architecture::ModuleDefinition do
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
     module_definition.dependencies.count.should be_eql(6)
-    module_definition.dependencies.should include("Koala::Facebook::API")
     module_definition.dependencies.should include("OutraClasse::De::Teste")
     module_definition.dependencies.should include("ActiveRecord::Base")
   end
