@@ -231,7 +231,7 @@ module Archruby
               module_name = architecture.module_name(dependency.class_name)
               next if architecture.is_ruby_internals? module_name
               if module_name != self.name && !@config_definition.allowed_modules.include?(module_name)
-                next if /[A-Z]_+[A-Z]/.match(dependency.class_name)
+                next if /[A-Z]_+[A-Z]/.match(dependency.class_name) || @config_definition.required_modules.include?(module_name)
                 breaks << Archruby::Architecture::ConstraintBreak.new(
                   :type => 'divergence',
                   :class_origin => class_name,
