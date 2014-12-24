@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["sergiohenriquetp@gmail.com"]
   spec.description   = %q{Compliance and Architectural Visualization in Ruby systems}
   spec.summary       = %q{Compliance and Architectural Visualization in Ruby systems}
-  spec.homepage      = ""
+  spec.homepage      = "http://aserg.labsoft.dcc.ufmg.br/archruby/"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
