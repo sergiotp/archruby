@@ -2,12 +2,12 @@ module Archruby
   module Architecture
     class FileContent
 
-      def initialize base_directory
+      def initialize(base_directory)
         # base_directory "/Users/sergiomiranda/Labs/ruby_arch_checker/arch_checker/spec/dummy_app/app"
         @base_directory = base_directory
       end
 
-      def all_content_from_directory directory
+      def all_content_from_directory(directory)
         return if directory.nil? || directory.eql?("")
         content = {}
         file_paths = Dir.glob("#{@base_directory}/#{directory}")

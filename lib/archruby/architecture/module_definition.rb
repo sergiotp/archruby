@@ -3,15 +3,15 @@ module Archruby
 
     class ModuleDefinition
 
-      ALLOWED_CONSTRAINTS = ['required', 'allowed', 'forbidden']
+      ALLOWED_CONSTRAINTS = %w(required allowed forbidden)
 
       attr_reader :name, :allowed_modules, :required_modules, :forbidden_modules,
-      :dependencies, :classes_and_dependencies, :class_methods_and_deps,
-      :class_methods_calls
+                  :dependencies, :classes_and_dependencies, :class_methods_and_deps,
+                  :class_methods_calls
 
       attr_accessor :classes
 
-      def initialize config_definition, base_directory
+      def initialize(config_definition, base_directory)
         @config_definition = config_definition
         @name = @config_definition.module_name
         @allowed_modules = @config_definition.allowed_modules
@@ -28,16 +28,16 @@ module Archruby
         extract_dependencies
       end
 
-      def extract_content_of_files file_extractor = Archruby::Architecture::FileContent
+      def extract_content_of_files(file_extractor = Archruby::Architecture::FileContent)
         return if !@classes.empty?
         file_extractor = file_extractor.new(@base_directory)
         @config_definition.files.each do |file|
-          file_content = file_extractor.all_content_from_directory file
+          file_content = file_extractor.all_content_from_directory(file)
           @files_and_contents << file_content
         end
       end
 
-      def extract_dependencies ruby_parser = Archruby::Ruby::Parser
+      def extract_dependencies(ruby_parser = Archruby::Ruby::Parser)
         return if !@classes.empty?
         @files_and_contents.each do |file_and_content|
           file_and_content.each do |file_name, content|
@@ -56,7 +56,7 @@ module Archruby
         @class_methods_calls.flatten!
       end
 
-      def add_new_dep class_name, type_inference_dep
+      def add_new_dep(class_name, type_inference_dep)
         if !type_inference_dep.class_dep.nil? && !already_has_dependency?(class_name, type_inference_dep.class_dep)
           new_dep = Archruby::Architecture::Dependency.new(type_inference_dep.class_dep, nil)
           @dependencies << type_inference_dep.class_dep
@@ -68,7 +68,7 @@ module Archruby
         end
       end
 
-      def already_has_dependency? class_name, class_dep
+      def already_has_dependency?(class_name, class_dep)
         has_dep = false
         @classes_and_dependencies.each do |class_and_dep|
           if class_and_dep.keys.first.eql?(class_name)
@@ -83,7 +83,7 @@ module Archruby
         has_dep
       end
 
-      def is_mine? class_name
+      def is_mine?(class_name)
         splited_class_name = class_name.split('::')
         first_class_name = splited_class_name.first
         is_mine = false
@@ -150,7 +150,7 @@ module Archruby
         @classes.empty?
       end
 
-      def verify_constraints architecture
+      def verify_constraints(architecture)
         required_breaks = verify_required architecture
         forbidden_breaks = verify_forbidden architecture
         allowed_breaks = verify_allowed architecture
@@ -161,7 +161,7 @@ module Archruby
 
       # Verifica todas as classes do modulo
       # Cada uma deve, de alguma forma, depender dos modulos que estao listados como required
-      def verify_required architecture
+      def verify_required(architecture)
         return if @config_definition.required_modules.empty?
         breaks = []
         @classes_and_dependencies.each_with_index do |class_and_depencies, index|
@@ -197,7 +197,7 @@ module Archruby
         breaks
       end
 
-      def verify_forbidden architecture
+      def verify_forbidden(architecture)
         return if @config_definition.forbidden_modules.empty?
         breaks = []
         @classes_and_dependencies.each do |class_and_depencies|
@@ -222,7 +222,7 @@ module Archruby
         breaks
       end
 
-      def verify_allowed architecture
+      def verify_allowed(architecture)
         return if @config_definition.allowed_modules.empty?
         breaks = []
         @classes_and_dependencies.each do |class_and_depencies|

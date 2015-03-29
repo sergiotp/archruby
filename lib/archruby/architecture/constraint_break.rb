@@ -7,7 +7,7 @@ module Archruby
       ABSENSE = "absence"
       DIVERGENCE = "divergence"
 
-      def initialize options
+      def initialize(options)
         @type = options[:type]
         @class_origin = options[:class_origin]
         @line_origin = options[:line_origin]

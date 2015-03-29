@@ -21,10 +21,11 @@ module Archruby
   class ExtractArchitecture
     attr_reader :architecture
 
-    def initialize config_file_path = "", base_directory = ""
+    def initialize(config_file_path = "", base_directory = "")
       @config_file_path = config_file_path
       @base_directory = base_directory
-      @architecture_definition = Archruby::Architecture::Parser.new(File.expand_path(@config_file_path, __FILE__), @base_directory)
+      config_path = File.expand_path(@config_file_path, __FILE__)
+      @architecture_definition = Archruby::Architecture::Parser.new(config_path, @base_directory)
       @architecture = Archruby::Architecture::Architecture.new(@architecture_definition.modules)
       @constraints_breaks = []
     end

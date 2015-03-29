@@ -6,7 +6,7 @@ module Archruby
     class Parser
       attr_reader :modules
 
-      def initialize config_file_path, base_path
+      def initialize(config_file_path, base_path)
         @config_file = config_file_path
         @base_path = base_path
         @modules = []
@@ -18,11 +18,11 @@ module Archruby
       end
 
       def parse
-        parsed_yaml = yaml_parser.load_file @config_file
+        parsed_yaml = yaml_parser.load_file(@config_file)
         parsed_yaml.each do |module_name, definitions|
           begin
-            config_definition = Archruby::Architecture::ConfigDefinition.new module_name, definitions
-            module_definition = Archruby::Architecture::ModuleDefinition.new config_definition, @base_path
+            config_definition = Archruby::Architecture::ConfigDefinition.new(module_name, definitions)
+            module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, @base_path)
             @type_inference_checker.add_method_deps module_definition.class_methods_and_deps
             @type_inference_checker.add_method_calls module_definition.class_methods_calls
           rescue Archruby::MultipleConstraints => e
@@ -31,7 +31,7 @@ module Archruby
           end
           @modules << module_definition
           @type_inference_checker.verify_types
-          @type_inference_checker.add_new_deps @modules
+          @type_inference_checker.add_new_deps(@modules)
         end
       end
 
@@ -40,21 +40,21 @@ module Archruby
       end
 
       def ruby_std_lib_module
-        config_definition_std_lib = Archruby::Architecture::ConfigDefinition.new Archruby::Ruby::STD_LIB_NAME, {"gems"=>"", "files"=>"", "allowed"=>"", "forbidden" => ""}
+        config_definition_std_lib = Archruby::Architecture::ConfigDefinition.new(Archruby::Ruby::STD_LIB_NAME, {"gems"=>"", "files"=>"", "allowed"=>"", "forbidden" => ""})
         module_definiton_std_lib = Archruby::Architecture::ModuleDefinition.new(config_definition_std_lib, @base_path)
         module_definiton_std_lib.classes = Archruby::Ruby::STD_LIBRARY_CLASSES
         @modules << module_definiton_std_lib
       end
 
       def ruby_core_module
-        config_definition_core = Archruby::Architecture::ConfigDefinition.new Archruby::Ruby::CORE_LIB_NAME, {"gems"=>"", "files"=>"", "allowed"=>"", "forbidden" => ""}
+        config_definition_core = Archruby::Architecture::ConfigDefinition.new(Archruby::Ruby::CORE_LIB_NAME, {"gems"=>"", "files"=>"", "allowed"=>"", "forbidden" => ""})
         module_definiton_core = Archruby::Architecture::ModuleDefinition.new(config_definition_core, @base_path)
         module_definiton_core.classes = Archruby::Ruby::CORE_LIBRARY_CLASSES
         @modules << module_definiton_core
       end
 
       def unknow_module
-        config_definition_unknow = Archruby::Architecture::ConfigDefinition.new "unknown", {"gems"=>"unknown", "files"=>"", "allowed"=>"", "forbidden" => ""}
+        config_definition_unknow = Archruby::Architecture::ConfigDefinition.new("unknown", {"gems"=>"unknown", "files"=>"", "allowed"=>"", "forbidden" => ""})
         @modules << Archruby::Architecture::ModuleDefinition.new(config_definition_unknow, @base_path)
       end
 
