@@ -151,9 +151,9 @@ module Archruby
       end
 
       def verify_constraints(architecture)
-        required_breaks = verify_required architecture
-        forbidden_breaks = verify_forbidden architecture
-        allowed_breaks = verify_allowed architecture
+        required_breaks = verify_required(architecture)
+        forbidden_breaks = verify_forbidden(architecture)
+        allowed_breaks = verify_allowed(architecture)
         all_constraints_breaks = [required_breaks, forbidden_breaks, allowed_breaks].flatten
         all_constraints_breaks.delete(nil)
         all_constraints_breaks

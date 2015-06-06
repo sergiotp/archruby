@@ -23,8 +23,8 @@ module Archruby
           begin
             config_definition = Archruby::Architecture::ConfigDefinition.new(module_name, definitions)
             module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, @base_path)
-            @type_inference_checker.add_method_deps module_definition.class_methods_and_deps
-            @type_inference_checker.add_method_calls module_definition.class_methods_calls
+            @type_inference_checker.add_method_deps(module_definition.class_methods_and_deps)
+            @type_inference_checker.add_method_calls(module_definition.class_methods_calls)
           rescue Archruby::MultipleConstraints => e
             STDOUT.puts "The config file is not right: #{e.msg} | err_code: #{e.status_code} | module_definition: #{module_name}"
             exit(e.status_code)
