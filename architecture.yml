@@ -1,0 +1,51 @@
+config_definition:
+  files: 'lib/archruby/architecture/config_definition.rb'
+
+module_definition:
+  files: 'lib/archruby/architecture/module_definition.rb'
+  allowed: 'config_definition, ruby_parser, dependency, constraint_break, file_extractor'
+
+architecture:
+  files: 'lib/archruby/architecture/architecture.rb'
+  forbidden: 'type_inference'
+
+architecture_parser:
+  files: 'lib/archruby/architecture/parser.rb'
+  allowed: 'config_definition, module_definition, type_inference, yaml_parser'
+
+constraint_break:
+  files: 'lib/archruby/architecture/constraint_break.rb'
+
+dependency:
+  files: 'lib/archruby/architecture/dependency.rb'
+
+type_inference:
+  files: 'lib/archruby/architecture/type_inference_checker.rb'
+
+presenters:
+  files: 'lib/archruby/presenters/**/*.rb'
+  allowed: 'architecture, graphviz'
+
+ruby_parser:
+  files: 'lib/archruby/ruby/parser.rb'
+  allowed: 'dependency, parser_ruby'
+  required: 'sexp_processor'
+
+sexp_processor:
+  gems: 'SexpInterpreter'
+
+yaml_parser:
+  gems: 'YAML'
+
+graphviz:
+  gems: 'GraphViz'
+
+parser_ruby:
+  gems: 'RubyParser'
+
+file_extractor:
+  files: 'lib/archruby/architecture/file_content.rb'
+
+multiple_constraints_validator:
+  files: 'lib/archruby.rb'
+  forbidden: 'architecture'

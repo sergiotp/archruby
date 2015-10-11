@@ -23,6 +23,7 @@ module Archruby
         internal_nodes = []
         external_nodes = []
         modules.each do |module_definiton|
+          next if module_definiton.name == 'unknown'
           next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           if module_definiton.is_external?
             nodes[module_definiton.name] = external.add_nodes(module_definiton.name, "shape" => "parallelogram", "color" => "gray60", "style" => "filled")
@@ -49,6 +50,7 @@ module Archruby
           module_definiton.dependencies.each do |class_name|
             module_dest = architecture.module_name class_name
             next if module_dest == Archruby::Ruby::STD_LIB_NAME || module_dest == Archruby::Ruby::CORE_LIB_NAME
+            next if module_dest == 'unknown'
             how_many_access = architecture.how_many_access_to module_name, module_dest
             if !edges[module_name][:edges].include?(module_dest) && module_dest != module_name
               edges[module_name][:edges] << module_dest
@@ -62,6 +64,7 @@ module Archruby
         constraints_breaks.each_with_index do |constraint_break, index|
           module_origin = constraint_break.module_origin
           module_target = constraint_break.module_target
+          next if module_target == 'unknown'
           contraint_type = constraint_break.type
           node_origin = nodes[module_origin]
           node_dest = nodes[module_target]
@@ -103,11 +106,11 @@ module Archruby
           next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           module_origin = module_definiton.is_empty? ? "#{module_definiton.name}\n [empty]" : module_definiton.name
           node_origin = nodes[module_origin]
-           #puts module_definiton.name.inspect
-           #puts module_definiton.classes.inspect
-           #puts module_definiton.dependencies.inspect
-           #puts module_definiton.classes_and_dependencies.inspect
-           #puts
+          #  puts module_definiton.name.inspect
+          #  puts module_definiton.classes.inspect
+          #  puts module_definiton.dependencies.inspect
+          #  puts module_definiton.classes_and_dependencies.inspect
+          #  puts
           module_definiton.allowed_modules.each do |allowed_module_name|
             module_target = allowed_module_name
             node_dest = nodes[allowed_module_name]

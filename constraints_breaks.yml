@@ -1,0 +1,113 @@
+---
+- divergence:
+    class_origin: Archruby::Architecture::Architecture
+    line_origin: 25
+    class_target: ArchitectureNotVerified
+    module_origin: architecture
+    module_target: unknown
+    message: module architecture is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 13
+    class_target: TypeInferenceChecker
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 28
+    class_target: Archruby::MultipleConstraints
+    module_origin: architecture_parser
+    module_target: multiple_constraints_validator
+    message: module architecture_parser is not allowed to depend on module multiple_constraints_validator
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 29
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 29
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 29
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 30
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 75
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 77
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 84
+    class_target: Archruby::Architecture::ConstraintBreak::DIVERGENCE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 96
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 97
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 100
+    class_target: Archruby::Architecture::ConstraintBreak::DIVERGENCE
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 13
+    class_target: Archruby::Presenters::Graph
+    module_origin: ruby_parser
+    module_target: presenters
+    message: accessing a module which is forbidden
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 21
+    class_target: Archruby::Presenters::Graph
+    module_origin: ruby_parser
+    module_target: presenters
+    message: accessing a module which is forbidden
+- divergence:
+    class_origin: Archruby::ExtractArchitecture
+    line_origin: 30
+    class_target: Archruby::Architecture::Architecture
+    module_origin: multiple_constraints_validator
+    module_target: architecture
+    message: accessing a module which is forbidden

@@ -3,15 +3,16 @@ module Archruby
 
     class ModuleDefinition
 
-      ALLOWED_CONSTRAINTS = ['required', 'allowed', 'forbidden']
+      ALLOWED_CONSTRAINTS = %w(required allowed forbidden)
 
       attr_reader :name, :allowed_modules, :required_modules, :forbidden_modules,
-      :dependencies, :classes_and_dependencies, :class_methods_and_deps,
-      :class_methods_calls
+                  :dependencies, :classes_and_dependencies, :class_methods_and_deps,
+                  :class_methods_calls, :type_inference_dependencies,
+                  :type_inference_methods_calls
 
       attr_accessor :classes
 
-      def initialize config_definition, base_directory
+      def initialize(config_definition, base_directory)
         @config_definition = config_definition
         @name = @config_definition.module_name
         @allowed_modules = @config_definition.allowed_modules
@@ -24,20 +25,23 @@ module Archruby
         @classes_and_dependencies = []
         @class_methods_and_deps = []
         @class_methods_calls = []
+        @type_inference_dependencies = []
+        @type_inference_methods_calls =[]
         extract_content_of_files
         extract_dependencies
+        #break type = TypeInferenceChecker.new
       end
 
-      def extract_content_of_files file_extractor = Archruby::Architecture::FileContent
+      def extract_content_of_files(file_extractor = Archruby::Architecture::FileContent)
         return if !@classes.empty?
         file_extractor = file_extractor.new(@base_directory)
         @config_definition.files.each do |file|
-          file_content = file_extractor.all_content_from_directory file
+          file_content = file_extractor.all_content_from_directory(file)
           @files_and_contents << file_content
         end
       end
 
-      def extract_dependencies ruby_parser = Archruby::Ruby::Parser
+      def extract_dependencies(ruby_parser = Archruby::Ruby::Parser)
         return if !@classes.empty?
         @files_and_contents.each do |file_and_content|
           file_and_content.each do |file_name, content|
@@ -47,6 +51,8 @@ module Archruby
             @classes_and_dependencies << parser.classes_and_dependencies
             @class_methods_and_deps << parser.type_inference
             @class_methods_calls << parser.method_calls
+            @type_inference_dependencies << parser.type_propagation_parser.dependencies
+            @type_inference_methods_calls << parser.type_propagation_parser.method_definitions
           end
         end
         @classes << @config_definition.gems
@@ -54,21 +60,27 @@ module Archruby
         @dependencies.flatten!
         @class_methods_and_deps.flatten!
         @class_methods_calls.flatten!
+        @type_inference_dependencies.flatten!
+        @type_inference_methods_calls.flatten!
       end
 
-      def add_new_dep class_name, type_inference_dep
-        if !type_inference_dep.class_dep.nil? && !already_has_dependency?(class_name, type_inference_dep.class_dep)
-          new_dep = Archruby::Architecture::Dependency.new(type_inference_dep.class_dep, nil)
-          @dependencies << type_inference_dep.class_dep
+      def add_new_dep(class_name, type_inference_dep)
+        if !type_inference_dep.nil? && !already_has_dependency?(class_name, type_inference_dep)
+          new_dep = Archruby::Architecture::Dependency.new(type_inference_dep, nil)
+          @dependencies << type_inference_dep
           @classes_and_dependencies.each do |class_and_dep|
             if class_and_dep.keys.first.eql?(class_name)
               class_and_dep[class_and_dep.keys.first].push(new_dep)
             end
           end
         end
+        # aqui precisamos tomar cuidado quando a classe ainda não está na estrutura
+        # classes and dependencies (tem exemplo disso no findmeontwitter)
+        # precisamos verificar se a dependencia foi adicionada, e caso não tenha sido
+        # devemos adicionar ao final do loop
       end
 
-      def already_has_dependency? class_name, class_dep
+      def already_has_dependency?(class_name, class_dep)
         has_dep = false
         @classes_and_dependencies.each do |class_and_dep|
           if class_and_dep.keys.first.eql?(class_name)
@@ -83,7 +95,8 @@ module Archruby
         has_dep
       end
 
-      def is_mine? class_name
+      def is_mine?(class_name)
+        #binding.pry
         splited_class_name = class_name.split('::')
         first_class_name = splited_class_name.first
         is_mine = false
@@ -150,10 +163,10 @@ module Archruby
         @classes.empty?
       end
 
-      def verify_constraints architecture
-        required_breaks = verify_required architecture
-        forbidden_breaks = verify_forbidden architecture
-        allowed_breaks = verify_allowed architecture
+      def verify_constraints(architecture)
+        required_breaks = verify_required(architecture)
+        forbidden_breaks = verify_forbidden(architecture)
+        allowed_breaks = verify_allowed(architecture)
         all_constraints_breaks = [required_breaks, forbidden_breaks, allowed_breaks].flatten
         all_constraints_breaks.delete(nil)
         all_constraints_breaks
@@ -161,7 +174,7 @@ module Archruby
 
       # Verifica todas as classes do modulo
       # Cada uma deve, de alguma forma, depender dos modulos que estao listados como required
-      def verify_required architecture
+      def verify_required(architecture)
         return if @config_definition.required_modules.empty?
         breaks = []
         @classes_and_dependencies.each_with_index do |class_and_depencies, index|
@@ -197,7 +210,7 @@ module Archruby
         breaks
       end
 
-      def verify_forbidden architecture
+      def verify_forbidden(architecture)
         return if @config_definition.forbidden_modules.empty?
         breaks = []
         @classes_and_dependencies.each do |class_and_depencies|
@@ -222,7 +235,7 @@ module Archruby
         breaks
       end
 
-      def verify_allowed architecture
+      def verify_allowed(architecture)
         return if @config_definition.allowed_modules.empty?
         breaks = []
         @classes_and_dependencies.each do |class_and_depencies|
