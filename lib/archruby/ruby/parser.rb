@@ -6,10 +6,11 @@ module Archruby
 
     class Parser < SexpInterpreter
       attr_reader :dependencies, :classes, :classes_and_dependencies,
-                  :type_inference, :method_calls
+                  :type_inference, :method_calls, :type_propagation_parser
 
       def initialize(content)
         super()
+        #a = Archruby::Presenters::Graph.new
         @content = content
         @dependencies = []
         @classes = []
@@ -18,6 +19,7 @@ module Archruby
         @module_names = []
         @complete_class_name = []
         @var_propagation = Archruby::Ruby::VarPropagation.new
+        @type_propagation_parser = Archruby::Ruby::TypeInference::Ruby::ParserForTypeinference.new
         @type_inference = []
         @method_calls = []
         parse
@@ -25,6 +27,7 @@ module Archruby
 
       def parse
         process ruby_parser.parse(@content)
+        @type_propagation_parser.parse(@content)
       end
 
       def process_block(exp)
@@ -202,7 +205,7 @@ module Archruby
 
       def process_iter(exp)
         _, *args = exp
-        args.map! {|sub_tree| process(sub_tree)}
+        args.map! {|sub_tree| next if sub_tree.class == Fixnum; process(sub_tree)}
       end
 
       def process_args(exp)

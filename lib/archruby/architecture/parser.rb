@@ -11,6 +11,7 @@ module Archruby
         @base_path = base_path
         @modules = []
         @type_inference_checker = TypeInferenceChecker.new
+        @type_inferece_dependency_organizer = Archruby::Ruby::TypeInference::DependencyOrganizer.new
         parse
         ruby_std_lib_module
         ruby_core_module
@@ -23,16 +24,29 @@ module Archruby
           begin
             config_definition = Archruby::Architecture::ConfigDefinition.new(module_name, definitions)
             module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, @base_path)
-            @type_inference_checker.add_method_deps(module_definition.class_methods_and_deps)
-            @type_inference_checker.add_method_calls(module_definition.class_methods_calls)
+            # @type_inference_checker.add_method_deps(module_definition.class_methods_and_deps)
+            # @type_inference_checker.add_method_calls(module_definition.class_methods_calls)
+
+            @type_inferece_dependency_organizer.add_dependencies(module_definition.type_inference_dependencies)
+            @type_inferece_dependency_organizer.add_method_calls(module_definition.type_inference_methods_calls)
           rescue Archruby::MultipleConstraints => e
             STDOUT.puts "The config file is not right: #{e.msg} | err_code: #{e.status_code} | module_definition: #{module_name}"
             exit(e.status_code)
           end
           @modules << module_definition
-          @type_inference_checker.verify_types
-          @type_inference_checker.add_new_deps(@modules)
+          #binding.pry
+          # @type_inference_checker.verify_types
+          # @type_inference_checker.add_new_deps(@modules)
         end
+        type_inferece_verifier = Archruby::Ruby::TypeInference::TypeInferenceChecker.new(
+                                  @type_inferece_dependency_organizer.dependencies,
+                                  @type_inferece_dependency_organizer.method_definitions
+                                )
+        type_inferece_verifier.add_dependency_based_on_calls
+        type_inferece_verifier.add_dependency_based_on_internal_calls
+        @type_inference_checker.populate_dependencies(type_inferece_verifier.dependencies)
+        @type_inference_checker.add_new_deps(@modules)
+        #binding.pry
       end
 
       def yaml_parser

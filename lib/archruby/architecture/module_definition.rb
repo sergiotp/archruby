@@ -7,7 +7,8 @@ module Archruby
 
       attr_reader :name, :allowed_modules, :required_modules, :forbidden_modules,
                   :dependencies, :classes_and_dependencies, :class_methods_and_deps,
-                  :class_methods_calls
+                  :class_methods_calls, :type_inference_dependencies,
+                  :type_inference_methods_calls
 
       attr_accessor :classes
 
@@ -24,8 +25,11 @@ module Archruby
         @classes_and_dependencies = []
         @class_methods_and_deps = []
         @class_methods_calls = []
+        @type_inference_dependencies = []
+        @type_inference_methods_calls =[]
         extract_content_of_files
         extract_dependencies
+        #break type = TypeInferenceChecker.new
       end
 
       def extract_content_of_files(file_extractor = Archruby::Architecture::FileContent)
@@ -47,6 +51,8 @@ module Archruby
             @classes_and_dependencies << parser.classes_and_dependencies
             @class_methods_and_deps << parser.type_inference
             @class_methods_calls << parser.method_calls
+            @type_inference_dependencies << parser.type_propagation_parser.dependencies
+            @type_inference_methods_calls << parser.type_propagation_parser.method_definitions
           end
         end
         @classes << @config_definition.gems
@@ -54,18 +60,24 @@ module Archruby
         @dependencies.flatten!
         @class_methods_and_deps.flatten!
         @class_methods_calls.flatten!
+        @type_inference_dependencies.flatten!
+        @type_inference_methods_calls.flatten!
       end
 
       def add_new_dep(class_name, type_inference_dep)
-        if !type_inference_dep.class_dep.nil? && !already_has_dependency?(class_name, type_inference_dep.class_dep)
-          new_dep = Archruby::Architecture::Dependency.new(type_inference_dep.class_dep, nil)
-          @dependencies << type_inference_dep.class_dep
+        if !type_inference_dep.nil? && !already_has_dependency?(class_name, type_inference_dep)
+          new_dep = Archruby::Architecture::Dependency.new(type_inference_dep, nil)
+          @dependencies << type_inference_dep
           @classes_and_dependencies.each do |class_and_dep|
             if class_and_dep.keys.first.eql?(class_name)
               class_and_dep[class_and_dep.keys.first].push(new_dep)
             end
           end
         end
+        # aqui precisamos tomar cuidado quando a classe ainda não está na estrutura
+        # classes and dependencies (tem exemplo disso no findmeontwitter)
+        # precisamos verificar se a dependencia foi adicionada, e caso não tenha sido
+        # devemos adicionar ao final do loop
       end
 
       def already_has_dependency?(class_name, class_dep)
@@ -84,6 +96,7 @@ module Archruby
       end
 
       def is_mine?(class_name)
+        #binding.pry
         splited_class_name = class_name.split('::')
         first_class_name = splited_class_name.first
         is_mine = false
