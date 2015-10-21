@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'archruby'
 
-config_path = nil
-app_root_path = nil
+config_path = "/home/elder/Documentos/Testes_Sistemas_ArchRuby/FindMeOnTwitter.yml"
+app_root_path = "/home/elder/Documentos/Testes_Sistemas_ArchRuby/FindMeOnTwitter"
 ARGV.each do |arg|
   option, value = arg.split('=')
   config_path = value if option.eql?('--arch_def_file')
@@ -18,3 +18,4 @@ constraints_breaks = arch_checker.verify
 
 Archruby::Presenters::Yaml.new.render(arch_checker.architecture)
 Archruby::Presenters::Graph.new.render(arch_checker.architecture)
+Archruby::Presenters::DSM.new.render(arch_checker.architecture)
