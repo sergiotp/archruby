@@ -1,5 +1,5 @@
 require 'imgkit'
-require_relative 'cell_dsm'
+require_relative 'dsm/cell_dsm'
 
 module Archruby
   module Presenters
@@ -13,7 +13,7 @@ module Archruby
       end
       
       def save_img(html)
-         path_css = File.absolute_path("../lib/archruby/presenters/css.css")
+         path_css = File.absolute_path("../lib/archruby/presenters/dsm/dsm_css.css")
          path_img = File.absolute_path("architecture_dsm.png")   
          kit = IMGKit.new(html,:quality => 100)
          kit.stylesheets << path_css
