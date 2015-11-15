@@ -18,3 +18,4 @@ constraints_breaks = arch_checker.verify
 
 Archruby::Presenters::Yaml.new.render(arch_checker.architecture)
 Archruby::Presenters::Graph.new.render(arch_checker.architecture)
+Archruby::Presenters::DSM.new.render(arch_checker.architecture)

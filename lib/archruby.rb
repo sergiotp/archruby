@@ -25,6 +25,7 @@ require 'archruby/architecture/constraint_break'
 require 'archruby/architecture/architecture'
 require 'archruby/presenters/text'
 require 'archruby/presenters/graph'
+require 'archruby/presenters/dsm'
 require 'archruby/presenters/yaml'
 
 module Archruby

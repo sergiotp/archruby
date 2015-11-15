@@ -25,5 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ruby_parser"
   spec.add_runtime_dependency "sexp_processor"
   spec.add_runtime_dependency "ruby-graphviz"
+  spec.add_runtime_dependency "imgkit"
+  spec.add_runtime_dependency "wkhtmltoimage-binary"
 
 end
