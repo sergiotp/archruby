@@ -11,10 +11,10 @@ module Archruby
         html = create_HTML(getModules(architecture), matrix)
         save_img(html)
       end
-      
+
       def save_img(html)
-         path_css = File.absolute_path("../lib/archruby/presenters/dsm/dsm_css.css")
-         path_img = File.absolute_path("architecture_dsm.png")   
+         path_css = File.absolute_path("/Users/sergiomiranda/Labs/ruby_arch_checker/archruby/lib/archruby/presenters/dsm/dsm_css.css")
+         path_img = File.absolute_path("architecture_dsm.png")
          kit = IMGKit.new(html, :quality => 100)
          kit.stylesheets << path_css
          kit.to_file(path_img)
@@ -51,7 +51,11 @@ module Archruby
             else
               architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::DIVERGENCE)
             end
-          matrix[index[module_target]][index[module_origin]] = CellDSM.new(how_many_access,contraint_type)
+          begin
+            matrix[index[module_target]][index[module_origin]] = CellDSM.new(how_many_access,contraint_type)
+          rescue
+          end
+
         end
         matrix
       end
@@ -65,7 +69,7 @@ module Archruby
             text = "#{text}      <td  width='8%' id='external'><center>#{i+1}</center></td>\n"
           else
             text = "#{text}      <td  width='8%' id='internal'><center>#{i+1}</center></td>\n"
-          end          
+          end
         end
         text = "#{text}    </tr>\n"
         for line in 0..matrix.size - 1
@@ -76,7 +80,7 @@ module Archruby
               text = "#{text}    <td id='internal'><div id='module'>#{modules[line].name}</div><div id='number''>#{line+1}</div></td>\n"
             end
           for column in 0..matrix.size - 1
-            text = 
+            text =
               if line == column
                 "#{text}    <td id='diagonal'></td>\n"
               elsif matrix[line][column].nil?
@@ -89,7 +93,7 @@ module Archruby
                 "#{text}    <td id='default'><center>#{matrix[line][column].how_many_access}</center></td>\n"
               end
           end
-          text = "#{text}  </tr>\n"          
+          text = "#{text}  </tr>\n"
         end
         text = "#{text}</table> </center>"
         text
@@ -98,7 +102,7 @@ module Archruby
       def getModules(architecture)
         modules = []
         architecture.modules.each do |module_definiton|
-          next if module_definiton.name == 'unknown'
+          #next if module_definiton.name == 'unknown'
           next if module_definiton.name == Archruby::Ruby::STD_LIB_NAME || module_definiton.name == Archruby::Ruby::CORE_LIB_NAME
           modules << module_definiton
         end
