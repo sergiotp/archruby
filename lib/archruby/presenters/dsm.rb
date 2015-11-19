@@ -60,15 +60,27 @@ module Archruby
         matrix
       end
 
+      def font(number)
+        font = 
+          if number >= 1000
+            "<font size = '1'>#{number}<font>"  
+          elsif number >= 100
+            "<font size = '2'>#{number}<font>"
+          else
+            "#{number}"
+          end
+        font
+      end
+
       def create_HTML(modules, matrix)
         text = "\n<center><table>\n"
         text = "#{text}    <tr>\n"
         text = "#{text}      <th>Modules</th>\n"
         for i in 0..modules.size - 1
           if modules[i].is_external?
-            text = "#{text}      <td  width='8%' id='external'><center>#{i+1}</center></td>\n"
+            text = "#{text}      <td  style='width:25px' id='external'><center>#{font(i+1)}</center></td>\n"
           else
-            text = "#{text}      <td  width='8%' id='internal'><center>#{i+1}</center></td>\n"
+            text = "#{text}      <td  style='width:25px' id='internal'><center>#{font(i+1)}</center></td>\n"
           end
         end
         text = "#{text}    </tr>\n"
@@ -86,11 +98,11 @@ module Archruby
               elsif matrix[line][column].nil?
                 "#{text}    <td id='default'></td>\n"
               elsif matrix[line][column].type == "absence"
-                "#{text}    <td id='absence'><center>#{matrix[line][column].how_many_access}</center></td>\n"
+                "#{text}    <td id='absence'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
               elsif matrix[line][column].type == "divergence"
-                "#{text}    <td id='divergence'><center>#{matrix[line][column].how_many_access}</center></td>\n"
+                "#{text}    <td id='divergence'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
               else
-                "#{text}    <td id='default'><center>#{matrix[line][column].how_many_access}</center></td>\n"
+                "#{text}    <td id='default'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
               end
           end
           text = "#{text}  </tr>\n"
