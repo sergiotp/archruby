@@ -13,11 +13,11 @@ module Archruby
       end
 
       def save_img(html)
-         path_css = File.absolute_path("/Users/sergiomiranda/Labs/ruby_arch_checker/archruby/lib/archruby/presenters/dsm/dsm_css.css")
-         path_img = File.absolute_path("architecture_dsm.png")
-         kit = IMGKit.new(html, :quality => 100)
-         kit.stylesheets << path_css
-         kit.to_file(path_img)
+        path_css = File.expand_path('../dsm/dsm_css.css', __FILE__)
+        path_img = File.absolute_path("architecture_dsm.png")
+        kit = IMGKit.new(html, :quality => 100)
+        kit.stylesheets << path_css
+        kit.to_file(path_img)
       end
 
       def create_DSM(architecture)
@@ -61,9 +61,9 @@ module Archruby
       end
 
       def font(number)
-        font = 
+        font =
           if number >= 1000
-            "<font size = '1'>#{number}<font>"  
+            "<font size = '1'>#{number}<font>"
           elsif number >= 100
             "<font size = '2'>#{number}<font>"
           else
