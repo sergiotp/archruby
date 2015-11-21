@@ -21,8 +21,8 @@ describe Archruby::Architecture::ModuleDefinition do
     base_directory = File.expand_path('../../dummy_app/', __FILE__)
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
-    module_definition.already_has_dependency?("User", "ActiveRecord::Base").should be_true
-    module_definition.already_has_dependency?("User", "ClassQualquer").should be_false
+    expect(module_definition.already_has_dependency?("User", "ActiveRecord::Base")).to be_true
+    expect(module_definition.already_has_dependency?("User", "ClassQualquer")).to be_false
   end
 
   it 'build the dependencies correctly' do
@@ -38,13 +38,13 @@ describe Archruby::Architecture::ModuleDefinition do
     base_directory = File.expand_path('../../dummy_app/', __FILE__)
     config_definition = Archruby::Architecture::ConfigDefinition.new 'model', parsed_yaml['model']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
-    module_definition.is_mine?("Teste").should be_true
-    module_definition.is_mine?("User").should be_true
-    module_definition.is_mine?("ActiveRecord").should be_false
-    module_definition.is_mine?("QualquerCoisa").should be_false
-    module_definition.is_mine?("::User").should be_true
-    module_definition.is_mine?("::User::Nao::Sei").should be_false
-    module_definition.is_mine?("Testando::VaiAcessar").should be_true
+    expect(module_definition.is_mine?("Teste")).to be_true
+    expect(module_definition.is_mine?("User")).to be_true
+    expect(module_definition.is_mine?("ActiveRecord")).to be_false
+    expect(module_definition.is_mine?("QualquerCoisa")).to be_false
+    expect(module_definition.is_mine?("::User")).to be_true
+    expect(module_definition.is_mine?("::User::Nao::Sei")).to be_false
+    expect(module_definition.is_mine?("Testando::VaiAcessar")).to be_true
 
     config_definition = Archruby::Architecture::ConfigDefinition.new 'actioncontroller', parsed_yaml['actioncontroller']
     module_definition = Archruby::Architecture::ModuleDefinition.new(config_definition, base_directory)
