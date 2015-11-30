@@ -5,19 +5,23 @@ table td, tr, th {
 }
 	
 table {
+  white-space: nowrap;
   border-collapse:collapse;
   margin-bottom:15px;
 }
 
 #absence{
+  width:25px;
   background:#ff0000;
 }
 
 #divergence{
+  width:25px;
   background:#ffa200;
 }
 
 #diagonal{
+  width:25px;
   background:#F3F3F3;
 }
 
@@ -30,6 +34,7 @@ table {
 }
 
 #default{
+  width:25px;
   background:#F9F9F9;
 }
 
