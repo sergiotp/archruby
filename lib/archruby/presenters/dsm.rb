@@ -78,9 +78,9 @@ module Archruby
         text = "#{text}      <th>Modules</th>\n"
         for i in 0..modules.size - 1
           if modules[i].is_external?
-            text = "#{text}      <td  style='width:25px' id='external'><center>#{font(i+1)}</center></td>\n"
+            text = "#{text}      <td id='external'><div style='width: 25px'><center>#{font(i+1)}</center></div></td>\n"
           else
-            text = "#{text}      <td  style='width:25px' id='internal'><center>#{font(i+1)}</center></td>\n"
+            text = "#{text}      <td id='internal'><div style='width: 25px'><center>#{font(i+1)}</center></div></td>\n"
           end
         end
         text = "#{text}    </tr>\n"
