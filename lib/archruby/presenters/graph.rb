@@ -75,14 +75,14 @@ module Archruby
                 edge.set do |e|
                   e.headlabel = "X (##{architecture.how_many_break(module_origin, module_target,  Archruby::Architecture::ConstraintBreak::ABSENSE)})"
                   e.color = "red"
-                  e.style = "bold"
+                  e.style = "dotted"
                   e.minlen = 2
                 end
               else
                 edge.set do |e|
                   e.headlabel = "! (##{architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::DIVERGENCE)})"
                   e.color = "orange"
-                  e.style = "bold"
+                  e.style = "dashed"
                   e.minlen = 2
                 end
               end
@@ -94,10 +94,10 @@ module Archruby
           if !node_found
             if contraint_type == Archruby::Architecture::ConstraintBreak::ABSENSE
               break_count = architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::ABSENSE)
-              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :headlabel => "X (##{break_count})", 'style' => 'bold', :minlen => 2)
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :headlabel => "X (##{break_count})", 'style' => 'dotted', :minlen => 2)
             else
               break_count = architecture.how_many_break(module_origin, module_target, Archruby::Architecture::ConstraintBreak::DIVERGENCE)
-              edges_objs << g.add_edges(node_origin, node_dest, :color => 'red', :headlabel => "! (##{break_count})", 'style' => 'bold', :minlen => 2)
+              edges_objs << g.add_edges(node_origin, node_dest, :color => 'orange', :headlabel => "! (##{break_count})", 'style' => 'dashed', :minlen => 2)
             end
           end
         end
