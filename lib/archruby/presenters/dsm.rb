@@ -25,16 +25,24 @@ module Archruby
         index = create_hash_index(modules)
         matrix = Array.new(modules.size) { Array.new(modules.size) }
 
+
         #adiciona na matriz todas as dependências permitidas
         modules.each do |module_definiton|
           module_name = module_definiton.name
+          dependencies = []
           module_definiton.dependencies.each do |class_name|
             module_dest = architecture.module_name(class_name)
+            dependencies << module_dest
             next if module_dest == Archruby::Ruby::STD_LIB_NAME || module_dest == Archruby::Ruby::CORE_LIB_NAME
             next if module_dest == 'unknown'
             how_many_access = architecture.how_many_access_to(module_name, module_dest)
             if module_dest != module_name
               matrix[index[module_dest]][index[module_name]] = CellDSM.new(how_many_access, "allowed")
+            end
+          end
+          module_definiton.allowed_modules.each do |allowed_module_name|
+            if !dependencies.include? allowed_module_name
+              matrix[index[allowed_module_name]][index[module_name]] = CellDSM.new("?","warning")
             end
           end
         end
@@ -73,36 +81,36 @@ module Archruby
       end
 
       def create_HTML(modules, matrix)
+        show_unknown = show_unknown?(matrix, modules)
         text = "\n<center><table>\n"
         text = "#{text}    <tr>\n"
         text = "#{text}      <th>Modules</th>\n"
         for i in 0..modules.size - 1
-          if modules[i].is_external?
-            text = "#{text}      <td id='external'><div style='width: 25px'><center>#{font(i+1)}</center></div></td>\n"
-          else
-            text = "#{text}      <td id='internal'><div style='width: 25px'><center>#{font(i+1)}</center></div></td>\n"
-          end
+          next if modules[i].name == 'unknown' && !show_unknown
+          module_type = modules[i].is_external? ? "external" : "internal"
+          text = "#{text}      <td class='#{module_type}'><div style='width: 25px'><center>#{font(i+1)}</center></div></td>\n"
         end
         text = "#{text}    </tr>\n"
         for line in 0..matrix.size - 1
+            next if modules[line].name == 'unknown' && !show_unknown
             text = "#{text}  <tr>\n"
-            if modules[line].is_external?
-              text = "#{text}    <td id='external'><div id='module'>#{modules[line].name}</div><div id='number'>#{line+1}</div></td>\n"
-            else
-              text = "#{text}    <td id='internal'><div id='module'>#{modules[line].name}</div><div id='number''>#{line+1}</div></td>\n"
-            end
+            module_type = modules[line].is_external? ? "external" : "internal"
+            text = "#{text}    <td class='#{module_type}'><div class='module'>#{modules[line].name}</div><div class='number'>#{line+1}</div></td>\n"
           for column in 0..matrix.size - 1
+            next if modules[column].name == 'unknown' && !show_unknown
             text =
               if line == column
-                "#{text}    <td id='diagonal'></td>\n"
+                "#{text}    <td class='diagonal'></td>\n"
               elsif matrix[line][column].nil?
-                "#{text}    <td id='default'></td>\n"
+                "#{text}    <td class='default'></td>\n"
               elsif matrix[line][column].type == "absence"
-                "#{text}    <td id='absence'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
+                "#{text}    <td class='absence'><center>#{font(matrix[line][column].how_many_access)}</center></td>\n"
               elsif matrix[line][column].type == "divergence"
-                "#{text}    <td id='divergence'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
+                "#{text}    <td class='divergence'><center>#{font(matrix[line][column].how_many_access)}</center></td>\n"
+              elsif matrix[line][column].type == "warning"
+                "#{text}    <td class='warning'><center>#{matrix[line][column].how_many_access}</center></td>\n"
               else
-                "#{text}    <td id='default'><center>#{matrix[line][column].how_many_access_with_font}</center></td>\n"
+                "#{text}    <td class='default'><center>#{font(matrix[line][column].how_many_access)}</center></td>\n"
               end
           end
           text = "#{text}  </tr>\n"
@@ -127,6 +135,27 @@ module Archruby
           index[modules[i].name] = i
         end
         index
+      end
+
+      def show_unknown?(matrix, modules)
+        #line = line of module unknown
+        line = -1
+        show_unknown = false
+        for i in 0 .. modules.size - 1
+          if modules[i].name == 'unknown'
+            line = i
+            break
+          end
+        end
+        if line != -1
+          for j in 0 .. matrix.size - 1
+            if !matrix[line][j].nil?
+              show_unknown = true
+              break
+            end
+          end
+        end
+        show_unknown
       end
 
     end
