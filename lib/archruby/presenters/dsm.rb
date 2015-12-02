@@ -138,18 +138,18 @@ module Archruby
       end
 
       def show_unknown?(matrix, modules)
-        #line = line of module unknown
-        line = -1
+        #column = column of module unknown
+        column = -1
         show_unknown = false
         for i in 0 .. modules.size - 1
           if modules[i].name == 'unknown'
-            line = i
+            column = i
             break
           end
         end
-        if line != -1
-          for j in 0 .. matrix.size - 1
-            if !matrix[line][j].nil?
+        if column != -1
+          for i in 0 .. matrix.size - 1
+            if !matrix[i][column].nil?
               show_unknown = true
               break
             end
