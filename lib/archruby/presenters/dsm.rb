@@ -149,7 +149,7 @@ module Archruby
         end
         if column != -1
           for i in 0 .. matrix.size - 1
-            if !matrix[i][column].nil?
+            if !matrix[i][column].nil? || !matrix[column][i].nil?
               show_unknown = true
               break
             end
