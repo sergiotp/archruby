@@ -24,15 +24,20 @@ th {
   background:#F9F9F9;
 }
 
-
 .absence{
   width:25px;
-  background:#ff0000;
+  background:rgba(255,0,0,0.4);
+  border: 2px double #ff0000;
+  padding: 2px;
+  border-style:dotted;
 }
 
 .divergence{
   width:25px;
-  background:#ffa200;
+  background:rgba(255,162,0,0.4);
+  border: 2px double #ffa200;
+  padding: 2px;
+  border-style:dashed;
 }
 
 .diagonal{
@@ -70,8 +75,3 @@ th {
   color: gray;
   text-align: center;
 }
-				
-
-			
-
-
