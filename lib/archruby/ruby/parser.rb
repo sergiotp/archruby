@@ -87,6 +87,10 @@ module Archruby
         @classes_and_dependencies[class_name] << Archruby::Architecture::Dependency.new(const_name, line_number)
       end
 
+      def process_for(exp)
+        
+      end
+
       def add_dependency(const_name)
         @dependencies << const_name.to_s if !@dependencies.include?(const_name.to_s)
       end
