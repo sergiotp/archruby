@@ -15,7 +15,6 @@ module Archruby
           end
 
           def parse
-            #binding.pry
             @ast.map! {|sub_tree| process(sub_tree)}
             @method_calls
           end
@@ -25,14 +24,14 @@ module Archruby
             if receiver && receiver[0] == :lvar && receiver[1].class == Symbol
               type = @local_scope.var_type(receiver[1])
               parsed_params = ProcessMethodParams.new(params, @local_scope).parse
-              add_method_call(type, method_name, parsed_params)
+              add_method_call(type, method_name, parsed_params, exp.line)
             elsif !receiver.nil?
               process(receiver)
               parsed_params = nil
               if check_if_has_params(params)
                 parsed_params = ProcessMethodParams.new(params, @local_scope).parse
               end
-              add_method_call(@current_dependency_class_name, method_name, parsed_params)
+              add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line)
               #@current_dependency_class_name = nil
             end
           end
@@ -51,8 +50,8 @@ module Archruby
             has_local_params
           end
 
-          def add_method_call(class_name, method_name, params=nil)
-            @method_calls << InternalMethodInvocation.new(class_name, method_name, params)
+          def add_method_call(class_name, method_name, params=nil, line_num=nil)
+            @method_calls << InternalMethodInvocation.new(class_name, method_name, params, line_num)
           end
 
           def process_lasgn(exp)
@@ -420,7 +419,7 @@ module Archruby
           end
 
         end
-        
+
       end
     end
   end
