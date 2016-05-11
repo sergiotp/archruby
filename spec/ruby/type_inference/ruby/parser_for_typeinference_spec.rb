@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Archruby::Ruby::TypeInference::Ruby::ParserForTypeinference do
   before do
-    @fixtures_path = File.expand_path('../fixtures', __FILE__)
+    @fixtures_path = File.expand_path('../../fixtures', __FILE__)
   end
 
   it "parse the file correctly" do
