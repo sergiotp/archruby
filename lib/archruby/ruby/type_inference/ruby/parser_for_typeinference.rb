@@ -125,6 +125,9 @@ module Archruby
           def process_defn(exp)
             _, method_name, method_arguments, *method_body = exp
             @current_scope.add_new_scope
+            if @current_class
+              @current_scope.add_variable("self", @current_class)
+            end
             args = ProcessMethodArguments.new(method_arguments).parse
             populate_scope_with_formal_parameters(args)
             method_calls = ProcessMethodBody.new(method_body, @current_scope).parse

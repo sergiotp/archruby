@@ -250,6 +250,10 @@ module Archruby
           end
 
           def process_self(exp)
+            type = @local_scope.var_type("self")
+            if type
+              add_to_params(type)
+            end
           end
 
           def process_str(exp)
