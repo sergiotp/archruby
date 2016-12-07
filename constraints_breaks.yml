@@ -1,0 +1,288 @@
+---
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 13
+    class_target: TypeInferenceChecker
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 14
+    class_target: TypeInferenceChecker
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 33
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 33
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 33
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Architecture::Parser
+    line_origin: 34
+    class_target: STDOUT
+    module_origin: architecture_parser
+    module_target: unknown
+    message: module architecture_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 18
+    class_target: IMGKit
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 19
+    class_target: IMGKit
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 20
+    class_target: IMGKit
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 40
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 45
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 57
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 58
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 60
+    class_target: Archruby::Architecture::ConstraintBreak::DIVERGENCE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 63
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 40
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 45
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 63
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::DSM
+    line_origin: 63
+    class_target: CellDSM
+    module_origin: presenters
+    module_target: unknown
+    message: module presenters is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 75
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 77
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 84
+    class_target: Archruby::Architecture::ConstraintBreak::DIVERGENCE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 96
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 97
+    class_target: Archruby::Architecture::ConstraintBreak::ABSENSE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Presenters::Graph
+    line_origin: 100
+    class_target: Archruby::Architecture::ConstraintBreak::DIVERGENCE
+    module_origin: presenters
+    module_target: config_definition
+    message: module presenters is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 21
+    class_target: Archruby::Ruby::VarPropagation
+    module_origin: ruby_parser
+    module_target: config_definition
+    message: module ruby_parser is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 22
+    class_target: Archruby::Ruby::TypeInference::Ruby::ParserForTypeinference
+    module_origin: ruby_parser
+    module_target: config_definition
+    message: module ruby_parser is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 22
+    class_target: Archruby::Ruby::VarPropagation
+    module_origin: ruby_parser
+    module_target: config_definition
+    message: module ruby_parser is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 87
+    class_target: Archruby::Architecture::Dependency
+    module_origin: ruby_parser
+    module_target: config_definition
+    message: module ruby_parser is not allowed to depend on module config_definition
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 136
+    class_target: TypeInferenceDep
+    module_origin: ruby_parser
+    module_target: unknown
+    message: module ruby_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 144
+    class_target: TypeInferenceDep
+    module_origin: ruby_parser
+    module_target: unknown
+    message: module ruby_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 141
+    class_target: TypeInferenceDep
+    module_origin: ruby_parser
+    module_target: unknown
+    message: module ruby_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 144
+    class_target: TypeInferenceDep
+    module_origin: ruby_parser
+    module_target: unknown
+    message: module ruby_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 149
+    class_target: TypeInferenceDep
+    module_origin: ruby_parser
+    module_target: unknown
+    message: module ruby_parser is not allowed to depend on module unknown
+- divergence:
+    class_origin: Archruby::Ruby::Parser
+    line_origin: 185
+    class_target: Archruby::Ruby::VarPropagation
+    module_origin: ruby_parser
+    module_target: config_definition
+    message: module ruby_parser is not allowed to depend on module config_definition
+- absence:
+    class_origin: Archruby::Ruby::TypeInference::DependencyOrganizer
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module
+- absence:
+    class_origin: Archruby::Ruby::TypeInference::Ruby::ClassDependency
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module
+- absence:
+    class_origin: Archruby::Ruby::TypeInference
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module
+- absence:
+    class_origin: Archruby::Ruby::TypeInference::Ruby::LocalScope
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module
+- absence:
+    class_origin: Archruby
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module
+- absence:
+    class_origin: Archruby::Ruby::TypeInference::TypeInferenceChecker
+    line_origin: 
+    class_target: 
+    module_origin: parser_for_typeinference
+    module_target: sexp_processor
+    message: not implement a required module

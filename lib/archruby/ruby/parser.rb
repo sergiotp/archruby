@@ -88,7 +88,7 @@ module Archruby
       end
 
       def process_for(exp)
-        
+
       end
 
       def add_dependency(const_name)
@@ -280,7 +280,7 @@ module Archruby
 
       def process_masgn(exp)
         _, *args = exp
-        args.map! {|sub_tree| process(sub_tree)}
+        args.map! {|sub_tree| process(sub_tree) if sub_tree.class != Symbol}
       end
 
       def process_array(exp)
@@ -467,6 +467,62 @@ module Archruby
 
       def process_dot3(exp)
         _ = exp
+      end
+
+      def process_dsym(exp)
+        _ = exp
+      end
+
+      def process_defined(exp)
+        _, *define_clause = exp
+        define_clause.map! {|sub_tree| process(sub_tree)}
+      end
+
+      def process_alias(exp)
+        _ = exp
+      end
+
+      def process_nth_ref(exp)
+
+      end
+
+      def process_begin(exp)
+        _, body, error_class = exp
+        process(body)
+      end
+
+      def process_not(exp)
+        _, *expression = exp
+        expression.map! {|sub_tree| process(sub_tree)}
+      end
+
+      def process_kwsplat(exp)
+        _, *args = exp
+        args.map! { |subtree| process(subtree) }
+      end
+
+      def process_retry(exp)
+      end
+
+      def process_cvasgn(exp)
+        _, class_var_name, *value = exp
+        value.map! {|sub_tree| process(sub_tree)}
+      end
+
+      def process_gasgn(exp)
+        _, global_var_name, *value = exp
+        value.map! {|sub_tree| process(sub_tree)}
+      end
+
+      def process_xstr(exp)
+      end
+
+      def process_op_asgn_and(exp)
+        _, *args = exp
+        args.map! {|sub_tree| process(sub_tree)}
+      end
+
+      def process_back_ref(exp)
       end
 
       def ruby_parser

@@ -9,6 +9,7 @@ begin
 rescue LoadError
   # no rspec available
 end
+require 'code_metrics/statistics'
 
 def name
   @name ||= File.basename(Dir['*.gemspec'].first, ".*")

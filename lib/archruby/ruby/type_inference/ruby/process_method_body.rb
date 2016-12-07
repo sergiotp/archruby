@@ -4,7 +4,7 @@ module Archruby
       module Ruby
 
         class ProcessMethodBody < SexpInterpreter
-          def initialize(ast, local_scope)
+          def initialize(method_name, ast, local_scope)
             super()
             @ast = ast
             @params = {}
@@ -12,6 +12,7 @@ module Archruby
             @current_dependency_class_name = nil
             @method_calls = []
             @local_scope = local_scope
+            @method_name = method_name
           end
 
           def parse
@@ -24,7 +25,7 @@ module Archruby
             if receiver && receiver[0] == :lvar && receiver[1].class == Symbol
               type = @local_scope.var_type(receiver[1])
               parsed_params = ProcessMethodParams.new(params, @local_scope).parse
-              add_method_call(type, method_name, parsed_params, exp.line)
+              add_method_call(type, method_name, parsed_params, exp.line, receiver[1])
             elsif !receiver.nil?
               process(receiver)
               parsed_params = nil
@@ -50,15 +51,17 @@ module Archruby
             has_local_params
           end
 
-          def add_method_call(class_name, method_name, params=nil, line_num=nil)
-            @method_calls << InternalMethodInvocation.new(class_name, method_name, params, line_num)
+          def add_method_call(class_name, method_name, params=nil, line_num=nil, var_name=nil)
+            @method_calls << InternalMethodInvocation.new(class_name, method_name, params, line_num, var_name)
           end
 
           def process_lasgn(exp)
             _, variable_name, *args = exp
             args.map! { |subtree| process(subtree) }
+            puts "#{@local_scope.var_type("self").first}, #{@method_name}, #{variable_name} | #{@current_dependency_class_name}"
             if @current_dependency_class_name
               @local_scope.add_variable(variable_name, @current_dependency_class_name)
+
             end
             @current_dependency_class_name = nil
           end

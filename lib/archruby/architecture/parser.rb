@@ -38,15 +38,16 @@ module Archruby
           # @type_inference_checker.verify_types
           # @type_inference_checker.add_new_deps(@modules)
         end
+        @type_inferece_dependency_organizer.read_from_csv_file
         type_inferece_verifier = Archruby::Ruby::TypeInference::TypeInferenceChecker.new(
                                   @type_inferece_dependency_organizer.dependencies,
                                   @type_inferece_dependency_organizer.method_definitions
                                 )
         type_inferece_verifier.add_dependency_based_on_calls
         type_inferece_verifier.add_dependency_based_on_internal_calls
+        type_inferece_verifier.print_method_definitions(@base_path)
         @type_inference_checker.populate_dependencies(type_inferece_verifier.dependencies)
         @type_inference_checker.add_new_deps(@modules)
-        #binding.pry
       end
 
       def yaml_parser

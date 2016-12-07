@@ -129,8 +129,8 @@ module Archruby
               @current_scope.add_variable("self", @current_class)
             end
             args = ProcessMethodArguments.new(method_arguments).parse
-            populate_scope_with_formal_parameters(args)
-            method_calls = ProcessMethodBody.new(method_body, @current_scope).parse
+            populate_scope_with_formal_parameters(args, method_name)
+            method_calls = ProcessMethodBody.new(method_name, method_body, @current_scope).parse
             add_method_definition(method_name, args, method_calls)
             add_dependencies(args, method_calls)
             @current_scope.remove_scope
@@ -174,11 +174,12 @@ module Archruby
             @dependencies << class_dependency
           end
 
-          def populate_scope_with_formal_parameters(args)
+          def populate_scope_with_formal_parameters(args, method_name)
             if !args.empty?
               args.each do |key, value|
                 #value it is a set object
                 @current_scope.add_formal_parameter(key, value.first)
+                puts "#{@current_scope.var_type("self").first}, #{method_name}, #{key} | #{value.first}"
               end
             end
           end

@@ -3,4 +3,6 @@ def teste(param1)
   a.some_method
   b = AnotherClass.new
   b.another_method(a, ClassTeste.new)
+  teste = []
+  teste_2 = {}
 end

@@ -1,0 +1,123 @@
+initialize#, 
+unused_method_definition?#method_definition, Archruby::Ruby::TypeInference::Ruby::MethodDefinition
+unused_internal_method_call?#internal_method_call, Archruby::Ruby::TypeInference::Ruby::InternalMethodInvocation
+yaml_parser#, 
+parse#type_inferece_verifier, Archruby::Ruby::TypeInference::TypeInferenceChecker
+ruby_std_lib_module#config_definition_std_lib, Archruby::Architecture::ConfigDefinition
+ruby_std_lib_module#module_definiton_std_lib, Archruby::Architecture::ModuleDefinition
+ruby_core_module#config_definition_core, Archruby::Architecture::ConfigDefinition
+ruby_core_module#module_definiton_core, Archruby::Architecture::ModuleDefinition
+unknow_module#config_definition_unknow, Archruby::Architecture::ConfigDefinition
+extract_content_of_files#file_extractor, Archruby::Architecture::FileContent
+initialize#config_definition, Archruby::Architecture::ConfigDefinition
+add_new_dep#new_dep, Archruby::Architecture::Dependency
+verify_required#architecture, Archruby::Architecture::Architecture
+verify_forbidden#architecture, Archruby::Architecture::Architecture
+verify_allowed#architecture, Archruby::Architecture::Architecture
+verify_constraints#architecture, Archruby::Architecture::Architecture
+add_new_scope#, 
+remove_scope#, 
+ruby_parser#, 
+add_dependencies#class_dependency, Archruby::Ruby::TypeInference::Ruby::ClassDependency
+process_const#exp, Sexp
+process_colon2#exp, Sexp
+process_colon2#first_part, Sexp
+process_lit#exp, Sexp
+process_hash#exp, Sexp
+process_hash#key, Sexp
+process_hash#value, Sexp
+process_call#exp, Sexp
+process_call#receiver, Sexp
+process_defn#exp, Sexp
+process_defn#method_arguments, Sexp
+process_class#exp, Sexp
+process_class#class_name, Sexp
+parse#ast, Sexp
+process_module#exp, Sexp
+process_module#module_name, Sexp
+process_defs#exp, Sexp
+process_defs#new_sexp, Sexp
+get_complete_class_name#exp, Sexp
+get_complete_class_name#first_part, Sexp
+process_block#exp, Sexp
+process_cdecl#exp, Sexp
+process_str#exp, Sexp
+process_colon3#exp, Sexp
+process_dstr#exp, Sexp
+process_iter#exp, Sexp
+process_iter#first_part, Sexp
+process_iter#second_part, Sexp
+process_cvdecl#exp, Sexp
+process_true#exp, Sexp
+process_false#exp, Sexp
+process_sclass#exp, Sexp
+process_sclass#singleton_class, Sexp
+process_self#exp, Sexp
+process_lasgn#exp, Sexp
+process_lvar#exp, Sexp
+process_array#exp, Sexp
+process_if#exp, Sexp
+process_or#exp, Sexp
+process_or#left_side, Sexp
+process_or#right_side, Sexp
+process_and#exp, Sexp
+process_and#left_side, Sexp
+process_and#right_side, Sexp
+build_type_inference#receiver, Sexp
+extract_arguments#arguments, Sexp
+process_args#exp, Sexp
+process_iasgn#exp, Sexp
+parse#, 
+process_nil#exp, Sexp
+process_nil#_, Sexp
+process_ivar#exp, Sexp
+process_defs#receiver, Sexp
+process_defs#arguments, Sexp
+process_return#exp, Sexp
+initialize#ast, Sexp
+initialize#local_scope, Archruby::Ruby::TypeInference::Ruby::LocalScope
+process_attrasgn#exp, Sexp
+process_attrasgn#receiver, Sexp
+process_attrasgn#value, Sexp
+process_if#condition, Sexp
+process_if#true_body, Sexp
+process_if#else_body, Sexp
+process_super#exp, Sexp
+process_zsuper#exp, Sexp
+process_resbody#exp, Sexp
+process_resbody#class_to_rescue, Sexp
+process_rescue#exp, Sexp
+process_rescue#body, Sexp
+process_rescue#rescbody, Sexp
+process_gvar#exp, Sexp
+process_op_asgn1#exp, Sexp
+process_match3#exp, Sexp
+process_match3#first, Sexp
+process_match3#second, Sexp
+process_evstr#exp, Sexp
+process_dregx_once#exp, Sexp
+process_nth_ref#exp, Sexp
+process_when#exp, Sexp
+process_when#condition, Sexp
+process_when#body, Sexp
+process_case#exp, Sexp
+process_case#condition, Sexp
+process_case#when_part, Sexp
+process_case#ensure_part, Sexp
+process_next#exp, Sexp
+process_gasgn#exp, Sexp
+process_xstr#exp, Sexp
+process_not#exp, Sexp
+process_block_pass#exp, Sexp
+add_new_params_dependency#method_definition, Archruby::Ruby::TypeInference::Ruby::MethodDefinition
+add_dependency_based_on_calls#, 
+add_dependency_based_on_internal_calls#, 
+parser#, 
+architecture#, 
+verify#, 
+how_many_access_to#module_origin, Archruby::Architecture::ModuleDefinition
+parsed_yaml#config_definition, Archruby::Architecture::ConfigDefinition
+parsed_yaml#module_definition, Archruby::Architecture::ModuleDefinition
+parsed_yaml#architecture, Archruby::Architecture::Architecture
+fake_constraint#divergence, Archruby::Architecture::ConstraintBreak
+ruby_content_file#, 

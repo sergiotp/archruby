@@ -8,7 +8,7 @@ describe Archruby::Ruby::TypeInference::Ruby::ProcessMethodBody do
     sexp = ruby_parser.parse(method_example_content)
     _, method_name, method_arguments, *method_body = sexp
     current_scope = Archruby::Ruby::TypeInference::Ruby::LocalScope.new
-    @result = Archruby::Ruby::TypeInference::Ruby::ProcessMethodBody.new(method_body, current_scope).parse
+    @result = Archruby::Ruby::TypeInference::Ruby::ProcessMethodBody.new(nil,method_body, current_scope).parse
   end
 
   it "return the correct amount of method calls" do

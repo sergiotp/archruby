@@ -28,7 +28,11 @@ presenters:
 
 ruby_parser:
   files: 'lib/archruby/ruby/parser.rb'
-  allowed: 'dependency, parser_ruby'
+  allowed: 'dependency, parser_ruby, parser_for_typeinference'
+  required: 'sexp_processor'
+
+parser_for_typeinference:
+  files: 'lib/archruby/ruby/type_inference/**/*.rb'
   required: 'sexp_processor'
 
 sexp_processor:

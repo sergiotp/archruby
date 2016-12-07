@@ -18,6 +18,28 @@ module Archruby
           total_dep
         end
 
+        def print_method_definitions(base_path)
+          file = File.open("#{base_path}/information_archmethods.csv", 'a')
+          @method_definitions.each do |class_name, method_definitions|
+            method_definitions.each do |method_def|
+              classes = []
+              var_names = []
+              method_def.method_calls.each do |m_c|
+                classes << m_c.class_name
+                var_names << m_c.var_name
+              end
+              classes_args = []
+              method_def.args.each do |key, value|
+                classes_args << value.to_a
+              end
+              classes_args.flatten!
+              file.puts "#{class_name}, #{method_def.method_name}, #{var_names.join(',')}, | #{classes.join(',')}"
+              file.puts "#{class_name}, #{method_def.method_name}, | #{classes_args.join(',')}"
+            end
+          end
+          file.close
+        end
+
         def add_dependency_based_on_calls
           @method_definitions.each do |class_name, method_definitions|
             method_definitions.each do |method_definition|

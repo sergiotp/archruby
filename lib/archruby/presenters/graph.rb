@@ -122,7 +122,14 @@ module Archruby
               end
             end
             if !edge_found
-              internal.add_edges(node_origin, node_dest, :color => 'gray74', :label => "[none]", :minlen => 2)
+              begin
+                internal.add_edges(node_origin, node_dest, :color => 'gray74', :label => "[none]", :minlen => 2)
+              rescue
+                puts "Target: #{module_target}"
+                puts "Allowed: #{allowed_module_name}"
+                exit
+              end
+
             end
           end
         end
