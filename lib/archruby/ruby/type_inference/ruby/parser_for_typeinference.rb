@@ -179,7 +179,7 @@ module Archruby
               args.each do |key, value|
                 #value it is a set object
                 @current_scope.add_formal_parameter(key, value.first)
-                puts "#{@current_scope.var_type("self").first}, #{method_name}, #{key} | #{value.first}"
+                #puts "#{@current_scope.var_type("self").first}, #{method_name}, #{key} | #{value.first}"
               end
             end
           end
