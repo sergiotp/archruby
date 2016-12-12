@@ -21,6 +21,7 @@ module Archruby
             @current_class = []
             @method_definitions = []
             @dependencies = []
+            @current_methods_defined = []
           end
 
           def parse(content)
@@ -88,6 +89,12 @@ module Archruby
 
           def process_class exp
             _, class_name, *args = exp
+            methods_defs = exp.find_nodes(:defn)
+            methods_defined = []
+            methods_defs.each do |method_def|
+              methods_defined.push method_def[1]
+            end
+            @current_methods_defined.push(methods_defined)
             if class_name.class == Symbol
               if !@module_names.empty?
                 @classes << "#{@module_names.join("::")}::#{class_name}"
@@ -104,6 +111,7 @@ module Archruby
             end
             args.map! {|sub_tree| process(sub_tree) if sub_tree.class == Sexp}
             @current_class.pop
+            @current_methods_defined.pop
           end
 
           def get_complete_class_name exp
@@ -130,7 +138,7 @@ module Archruby
             end
             args = ProcessMethodArguments.new(method_arguments).parse
             populate_scope_with_formal_parameters(args, method_name)
-            method_calls = ProcessMethodBody.new(method_name, method_body, @current_scope).parse
+            method_calls = ProcessMethodBody.new(method_name, method_body, @current_scope, @current_methods_defined.last).parse
             add_method_definition(method_name, args, method_calls)
             add_dependencies(args, method_calls)
             @current_scope.remove_scope

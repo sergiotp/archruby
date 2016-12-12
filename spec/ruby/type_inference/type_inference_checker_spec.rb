@@ -44,4 +44,27 @@ describe Archruby::Ruby::TypeInference::TypeInferenceChecker do
     expect(verify_type.total_deps).to eql(18)
   end
 
+  it "test types" do
+    parser = Archruby::Ruby::TypeInference::Ruby::ParserForTypeinference.new
+    file_content = File.read("#{@fixtures_path}/teste_types.rb")
+    dependencies, methods_calls = parser.parse(file_content)
+    dependency_organizer = Archruby::Ruby::TypeInference::DependencyOrganizer.new
+    dependency_organizer.add_dependencies(dependencies)
+    dependency_organizer.add_method_calls(methods_calls)
+    verify_type = Archruby::Ruby::TypeInference::TypeInferenceChecker.new(
+                    dependency_organizer.dependencies,
+                    dependency_organizer.method_definitions
+                  )
+    new_deps = verify_type.dependencies
+    new_methods = verify_type.method_definitions
+
+
+    verify_type.add_dependency_based_on_calls
+    verify_type.add_dependency_based_on_internal_calls
+
+    new_methods = verify_type.method_definitions
+    #binding.pry
+
+  end
+
 end

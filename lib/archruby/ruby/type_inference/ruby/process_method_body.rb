@@ -4,7 +4,7 @@ module Archruby
       module Ruby
 
         class ProcessMethodBody < SexpInterpreter
-          def initialize(method_name, ast, local_scope)
+          def initialize(method_name, ast, local_scope, class_defined_methods = nil)
             super()
             @ast = ast
             @params = {}
@@ -13,6 +13,7 @@ module Archruby
             @method_calls = []
             @local_scope = local_scope
             @method_name = method_name
+            @class_defined_methods = class_defined_methods
           end
 
           def parse
@@ -26,6 +27,10 @@ module Archruby
               type = @local_scope.var_type(receiver[1])
               parsed_params = ProcessMethodParams.new(params, @local_scope).parse
               add_method_call(type, method_name, parsed_params, exp.line, receiver[1])
+            elsif receiver && receiver[0] == :self
+              type = @local_scope.var_type("self")
+              parsed_params = ProcessMethodParams.new(params, @local_scope).parse
+              add_method_call(type, method_name, parsed_params, exp.line, "self")
             elsif !receiver.nil?
               process(receiver)
               parsed_params = nil
@@ -34,6 +39,14 @@ module Archruby
               end
               add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line)
               #@current_dependency_class_name = nil
+            else
+              if @class_defined_methods.include?(method_name)
+                type = @local_scope.var_type("self")
+                if check_if_has_params(params)
+                  parsed_params = ProcessMethodParams.new(params, @local_scope).parse
+                end
+                add_method_call(type, method_name, parsed_params, exp.line, "self")
+              end
             end
           end
 
