@@ -15,7 +15,7 @@ module Archruby
             @pos = 0
           end
 
-          def parse            
+          def parse
             @ast.map! do |sub_tree|
               process(sub_tree)
               @pos += 1
@@ -84,7 +84,7 @@ module Archruby
           end
 
           def add_to_params(name)
-            @params << name
+            @params[@pos] = name
             @new_params[@pos] = Set.new.add(name)
           end
 
