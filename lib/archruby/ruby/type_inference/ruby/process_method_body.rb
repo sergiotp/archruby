@@ -25,27 +25,27 @@ module Archruby
             _, receiver, method_name, *params = exp
             if receiver && receiver[0] == :lvar && receiver[1].class == Symbol
               type = @local_scope.var_type(receiver[1])
-              parsed_params = ProcessMethodParams.new(params, @local_scope).parse
-              add_method_call(type, method_name, parsed_params, exp.line, receiver[1])
+              parsed_params, new_params = ProcessMethodParams.new(params, @local_scope).parse
+              add_method_call(type, method_name, parsed_params, exp.line, receiver[1], new_params)
             elsif receiver && receiver[0] == :self
-              type = @local_scope.var_type("self")
-              parsed_params = ProcessMethodParams.new(params, @local_scope).parse
-              add_method_call(type, method_name, parsed_params, exp.line, "self")
+              type = @local_scope.var_type("self").dup
+              parsed_params, new_params = ProcessMethodParams.new(params, @local_scope).parse
+              add_method_call(type, method_name, parsed_params, exp.line, "self", new_params)
             elsif !receiver.nil?
               process(receiver)
               parsed_params = nil
               if check_if_has_params(params)
-                parsed_params = ProcessMethodParams.new(params, @local_scope).parse
+                parsed_params, new_params = ProcessMethodParams.new(params, @local_scope).parse
               end
-              add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line)
+              add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line, nil, new_params)
               #@current_dependency_class_name = nil
             else
-              if @class_defined_methods.include?(method_name)
-                type = @local_scope.var_type("self")
+              if @class_defined_methods && @class_defined_methods.include?(method_name)
+                type = @local_scope.var_type("self").dup
                 if check_if_has_params(params)
-                  parsed_params = ProcessMethodParams.new(params, @local_scope).parse
+                  parsed_params, new_params = ProcessMethodParams.new(params, @local_scope).parse
                 end
-                add_method_call(type, method_name, parsed_params, exp.line, "self")
+                add_method_call(type, method_name, parsed_params, exp.line, "self", new_params)
               end
             end
           end
@@ -64,8 +64,8 @@ module Archruby
             has_local_params
           end
 
-          def add_method_call(class_name, method_name, params=nil, line_num=nil, var_name=nil)
-            @method_calls << InternalMethodInvocation.new(class_name, method_name, params, line_num, var_name)
+          def add_method_call(class_name, method_name, params=nil, line_num=nil, var_name=nil, new_params = nil)
+            @method_calls << InternalMethodInvocation.new(class_name, method_name, params, line_num, var_name, new_params)
           end
 
           def process_lasgn(exp)

@@ -141,7 +141,7 @@ module Archruby
             method_calls = ProcessMethodBody.new(method_name, method_body, @current_scope, @current_methods_defined.last).parse
             add_method_definition(method_name, args, method_calls)
             add_dependencies(args, method_calls)
-            @current_scope.remove_scope
+            @current_scope.remove_scope            
           end
 
           def process_defs(exp)

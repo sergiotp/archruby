@@ -97,7 +97,11 @@ module Archruby
 
       def is_mine?(class_name)
         #binding.pry
-        splited_class_name = class_name.split('::')
+        begin
+          splited_class_name = class_name.split('::')
+        rescue
+          return false
+        end
         first_class_name = splited_class_name.first
         is_mine = false
         if first_class_name.empty?

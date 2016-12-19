@@ -18,7 +18,7 @@ module Archruby
           end
         end
 
-        def add_method_calls(found_calls)
+        def add_method_calls(found_calls)          
           found_calls.each do |method_definition|
             next if unused_method_definition?(method_definition)
             method_name = method_definition.method_name

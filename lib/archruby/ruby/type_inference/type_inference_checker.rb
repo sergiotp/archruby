@@ -53,7 +53,7 @@ module Archruby
           end
         end
 
-        def add_dependency_based_on_internal_calls
+        def add_dependency_based_on_internal_calls          
           3.times do
             @method_definitions.each do |class_name, method_definitions|
               method_definitions.each do |method_definition|

@@ -20,8 +20,8 @@ describe Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams do
 
     current_scope = Archruby::Ruby::TypeInference::Ruby::LocalScope.new
 
-    result1 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.first, current_scope).parse
-    result2 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.last, current_scope).parse
+    result1, result_new = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.first, current_scope).parse
+    result2, result_new2 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.last, current_scope).parse
 
     expect(result1).to be_eql([:a, :b, :c])
     expect(result2).to be_eql([:ClassTest, :a])
@@ -33,8 +33,8 @@ describe Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams do
     current_scope.add_variable(:b, "B")
     current_scope.add_variable(:c, "C")
 
-    result1 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.first, current_scope).parse
-    result2 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.last, current_scope).parse
+    result1, result_new = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.first, current_scope).parse
+    result2, result_new2 = Archruby::Ruby::TypeInference::Ruby::ProcessMethodParams.new(@collected_params.last, current_scope).parse
 
     expect(result1).to be_eql(["A", "B", "C"])
     expect(result2).to be_eql([:ClassTest, "A"])

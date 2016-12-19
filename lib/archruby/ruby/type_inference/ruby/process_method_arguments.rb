@@ -13,6 +13,7 @@ module Archruby
           end
 
           def parse
+            #binding.pry
             process(@ast)
             @params
           end
@@ -20,11 +21,18 @@ module Archruby
           def process_args(exp)
             _, *args = exp
             if !args.empty?
-              if args.first.class == Symbol
-                @params[args.first] ||= Set.new
-              else
-                args.map! {|sub_tree| process(sub_tree) if sub_tree.class == Sexp}
+              args.each do |arg|
+                if arg.class == Symbol
+                  @params[arg] ||= Set.new
+                else
+                  process(arg) if arg.class == Sexp
+                end
               end
+              # if args.first.class == Symbol
+              #   @params[args.first] ||= Set.new
+              # else
+              #   args.map! {|sub_tree| process(sub_tree) if sub_tree.class == Sexp}
+              # end
             end
           end
 
@@ -75,6 +83,7 @@ module Archruby
 
           def process_hash(exp)
             _, key, value = exp
+            @current_dependency_class_name = "Hash"
             process(key)
             process(value)
           end
@@ -91,6 +100,7 @@ module Archruby
 
           def process_array(exp)
             _, *args = exp
+            @current_dependency_class_name = "Array"
             args.map! {|sub_tree| process(sub_tree)}
           end
 
@@ -132,6 +142,7 @@ module Archruby
           end
 
           def process_nil(exp)
+            @current_dependency_class_name = "NilClass"
           end
 
           def process_str(exp)

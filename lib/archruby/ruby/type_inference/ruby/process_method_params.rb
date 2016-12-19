@@ -11,11 +11,16 @@ module Archruby
             @current_dependency_class_name = nil
             @local_scope = local_scope
             @params = []
+            @new_params = []
+            @pos = 0
           end
 
-          def parse
-            @ast.map! {|sub_tree| process(sub_tree)}
-            @params
+          def parse            
+            @ast.map! do |sub_tree|
+              process(sub_tree)
+              @pos += 1
+            end
+            [@params, @new_params]
           end
 
           def process_defn(exp)
@@ -80,6 +85,7 @@ module Archruby
 
           def add_to_params(name)
             @params << name
+            @new_params[@pos] = Set.new.add(name)
           end
 
           def process_colon2(exp)
@@ -257,6 +263,7 @@ module Archruby
           end
 
           def process_str(exp)
+            add_to_params("String")
           end
 
           def process_false(exp)
