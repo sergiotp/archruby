@@ -63,7 +63,7 @@ describe Archruby::Ruby::TypeInference::TypeInferenceChecker do
     verify_type.add_dependency_based_on_internal_calls
 
     new_methods = verify_type.method_definitions
-    binding.pry
+    #binding.pry
 
   end
 
@@ -86,7 +86,7 @@ describe Archruby::Ruby::TypeInference::TypeInferenceChecker do
     verify_type.add_dependency_based_on_internal_calls
 
     new_methods = verify_type.method_definitions
-    binding.pry
+    #binding.pry
   end
 
   it "test type 3 " do

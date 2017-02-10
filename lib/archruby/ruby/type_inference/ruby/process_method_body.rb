@@ -19,7 +19,6 @@ module Archruby
           def parse
             @ast.map! {|sub_tree| process(sub_tree)}
             @method_calls
-            binding.pry
           end
 
           def process_call(exp)
@@ -72,7 +71,7 @@ module Archruby
           def process_lasgn(exp)
             _, variable_name, *args = exp
             args.map! { |subtree| process(subtree) }
-            puts "#{@local_scope.var_type("self").first}, #{@method_name}, #{variable_name} | #{@current_dependency_class_name}"
+            #puts "#{@local_scope.var_type("self").first}, #{@method_name}, #{variable_name} | #{@current_dependency_class_name}"
             if @current_dependency_class_name
               @local_scope.add_variable(variable_name, @current_dependency_class_name)
               if ["String", "Integer", "Array", "Hash"].include?(@current_dependency_class_name)
