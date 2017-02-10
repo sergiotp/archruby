@@ -7,10 +7,12 @@ require 'archruby'
 
 config_path = nil
 app_root_path = nil
+more_types = nil
 ARGV.each do |arg|
   option, value = arg.split('=')
   config_path = value if option.eql?('--arch_def_file')
   app_root_path = value if option.eql?('--app_root_path')
+  more_types = value if option.eql?('--more_types')
 end
 
 arch_checker = Archruby::ExtractArchitecture.new(config_path, app_root_path)

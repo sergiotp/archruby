@@ -19,6 +19,7 @@ module Archruby
           def parse
             @ast.map! {|sub_tree| process(sub_tree)}
             @method_calls
+            binding.pry
           end
 
           def process_call(exp)
@@ -74,7 +75,9 @@ module Archruby
             puts "#{@local_scope.var_type("self").first}, #{@method_name}, #{variable_name} | #{@current_dependency_class_name}"
             if @current_dependency_class_name
               @local_scope.add_variable(variable_name, @current_dependency_class_name)
-
+              if ["String", "Integer", "Array", "Hash"].include?(@current_dependency_class_name)
+                add_method_call(@current_dependency_class_name , nil, nil, exp.line, variable_name, nil)
+              end
             end
             @current_dependency_class_name = nil
           end
@@ -160,6 +163,7 @@ module Archruby
             _, key, value = exp
             process(key)
             process(value)
+            @current_dependency_class_name = "Hash"
           end
 
           def process_super(exp)
@@ -187,6 +191,7 @@ module Archruby
           def process_array(exp)
             _, *args = exp
             args.map! {|sub_tree| process(sub_tree)}
+            @current_dependency_class_name = "Array"
           end
 
           def process_and(exp)
@@ -411,6 +416,7 @@ module Archruby
           end
 
           def process_str(exp)
+            @current_dependency_class_name = "String"
           end
 
           def process_gvar(exp)
@@ -423,6 +429,7 @@ module Archruby
           end
 
           def process_lit(exp)
+            @current_dependency_class_name = "Integer"
           end
 
           def process_lvar(exp)
