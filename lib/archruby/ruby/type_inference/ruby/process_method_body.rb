@@ -13,6 +13,7 @@ module Archruby
             @method_calls = []
             @local_scope = local_scope
             @method_name = method_name
+            @current_var_local = []
             @class_defined_methods = class_defined_methods
           end
 
@@ -37,7 +38,7 @@ module Archruby
               if check_if_has_params(params)
                 parsed_params, new_params = ProcessMethodParams.new(params, @local_scope).parse
               end
-              add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line, nil, new_params)
+              add_method_call(@current_dependency_class_name, method_name, parsed_params, exp.line, @current_var_local.last, new_params)
               #@current_dependency_class_name = nil
             else
               if @class_defined_methods && @class_defined_methods.include?(method_name)
@@ -70,6 +71,7 @@ module Archruby
 
           def process_lasgn(exp)
             _, variable_name, *args = exp
+            @current_var_local.push(variable_name)
             args.map! { |subtree| process(subtree) }
             #puts "#{@local_scope.var_type("self").first}, #{@method_name}, #{variable_name} | #{@current_dependency_class_name}"
             if @current_dependency_class_name
@@ -78,6 +80,7 @@ module Archruby
                 add_method_call(@current_dependency_class_name , nil, nil, exp.line, variable_name, nil)
               end
             end
+            @current_var_local.pop
             @current_dependency_class_name = nil
           end
 

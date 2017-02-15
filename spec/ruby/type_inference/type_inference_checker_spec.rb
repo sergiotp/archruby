@@ -93,6 +93,7 @@ describe Archruby::Ruby::TypeInference::TypeInferenceChecker do
     parser = Archruby::Ruby::TypeInference::Ruby::ParserForTypeinference.new
     file_content = File.read("#{@fixtures_path}/test_types3.rb")
     dependencies, methods_calls = parser.parse(file_content)
+    #binding.pry
     dependency_organizer = Archruby::Ruby::TypeInference::DependencyOrganizer.new
     dependency_organizer.add_dependencies(dependencies)
     dependency_organizer.add_method_calls(methods_calls)
